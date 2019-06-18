@@ -8,3 +8,11 @@
     - Link to more information about the book
         - could be on a page within your application
         - or link out to an external site
+
+## Approach to Solution
+- Simplfy requirements
+- Research Google Books API
+    - Learn how to interact with it
+        > I'm looking for a JavaScript interface that does not need a server-side code
+        
+        > If unavailable, I'll use node.js to connect with the API
