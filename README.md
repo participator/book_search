@@ -1,0 +1,10 @@
+## Features
+- User can type in a query and display a list of books matching that query.
+- Each item in the list should include the book's:
+    - author
+    - title
+    - publishing company
+    - a picture of the book
+    - Link to more information about the book
+        - could be on a page within your application
+        - or link out to an external site
