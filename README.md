@@ -16,3 +16,7 @@
         > I'm looking for a JavaScript interface that does not need a server-side code
         
         > If unavailable, I'll use node.js to connect with the API
+
+# Clarafications
+- What field can a query search e.g. author, title, publishing company, and etc.
+- Does the query search all of Google Books API or is it limited to the User's (My Library) data

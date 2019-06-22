@@ -1,0 +1,93 @@
+:root {
+    --bookSearch_grey: #C4C4C4;
+}
+body {
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    font-family: Roboto, sans-serif;
+}
+header {
+    display: flex;
+}
+.logo {
+    display: flex;
+    align-items: center;
+    font-size: 4em;
+    height: 100%;
+}
+.logo_icon {
+    margin-right: 0.5em;
+    width: 0.9em;
+}
+footer {
+    display: flex;
+    justify-content: center;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+.content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.book {
+    margin: 1em;
+    width: 30%;
+}
+.book img {
+    float: left;
+}
+.search {
+    max-width: 1024px;
+    min-width: 385px;
+    width: 50%;
+}
+.search_toggle {
+    display: block;
+    background-color: var(--bookSearch_grey);
+    border: none;
+    font-family: Roboto, sans-serif;
+    margin: auto;
+    padding: .5em 3em;
+    border-radius: 2em 2em 0 0;
+}
+.search_form {
+    background-color: var(--bookSearch_grey);
+    margin: 0;
+}
+.search_form_invalidMessage {
+    color: red;
+    text-align: center;
+}
+.search_form_inputs {
+    display: flex;
+    justify-content: space-around;
+    background-color: var(--bookSearch_grey);
+    padding: 0.6em;
+}
+.search_form input,
+.search_form button {
+    background-color: var(--bookSearch_grey);
+    border: 1px solid black;
+    color: black;
+    font-family: Roboto, sans-serif;
+    padding: 0.5em 1em;
+    font-size: 14px;
+}
+.search_form_input {
+    width: 75%;
+}
+.search_form_input::placeholder {
+    color: black;
+}
+.search_form_submitButton {
+    color:black;
+}
+
+/***** Utility Classes *****/
+
+.hideVisibility {
+    visibility: hidden;    
+}
