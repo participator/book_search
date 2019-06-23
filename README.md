@@ -25,4 +25,5 @@
     - Chose Jasmine as testing framework as it appears to work in the browser
 
 # Clarafications
-- Does the query search all of Google Books API or is it limited to the User's (My Library) data
+- No public data is required
+- Responsiveness is not required
