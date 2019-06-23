@@ -4,6 +4,8 @@
 body {
     box-sizing: border-box;
     display: flex;
+    flex-direction: column;
+    align-items: center;
     justify-content: center;
     font-family: Roboto, sans-serif;
 }
@@ -20,24 +22,33 @@ header {
     margin-right: 0.5em;
     width: 0.9em;
 }
-footer {
-    display: flex;
-    justify-content: center;
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-}
 .content {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
 }
 .book {
+    background-color: var(--bookSearch_grey);
     margin: 1em;
+    padding: 0.5em;
     width: 30%;
 }
-.book img {
+.book_image {
     float: left;
+    margin: 1em;
+}
+.book_details_back {
+    margin: 1em;
+}
+.book_details_front {
+    margin: 1em;
+}
+footer {
+    display: flex;
+    justify-content: center;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
 }
 .search {
     max-width: 1024px;
@@ -64,7 +75,6 @@ footer {
 .search_form_inputs {
     display: flex;
     justify-content: space-around;
-    background-color: var(--bookSearch_grey);
     padding: 0.6em;
 }
 .search_form input,
