@@ -1,0 +1,30 @@
+@media screen and (max-width: 1024px) {
+    .book {
+        width: 40%;
+    }
+    .logo {
+        left: calc(55vw/2);
+        top: calc(75vh/2);
+    }
+}
+@media screen and (max-width: 768px) {
+
+    .book {
+        width: 43%;
+    }
+    .logo {
+        left: calc(35vw/2);
+        top: calc(75vh/2);
+    }
+}
+
+@media screen and (max-width: 425px) {
+
+    .book {
+        width: 100%;
+    }
+    .logo {
+        font-size: 3em;
+        left: calc(20vw/2);
+    }
+}

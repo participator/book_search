@@ -8,6 +8,9 @@
     window.onload = () => {
         const searchForm = document.forms.bookSearch;
         searchForm.addEventListener('submit', exports.searchBooksOnFormSubmitEvent);
+
+        const searchToggle = document.querySelector('.search_toggle');
+        searchToggle.addEventListener('click', exports.changeFormState);
     }
 
     window.onscroll = (event) => {
@@ -21,6 +24,8 @@
     exports.searchBooksOnFormSubmitEvent = (event) => {
         event.preventDefault();
         window.scrollTo(0,0);
+        const logo = document.querySelector('.logo');
+        logo.classList.add('logoMove');
 
         const userInput = exports.getUserInput(event.target.elements.query);
 
@@ -217,6 +222,24 @@
         }
 
         return detailsContainerElement;
+    }
+
+    exports.changeFormState = (event) => {
+        const searchToggle = event.target;
+        const footer = document.querySelector('footer');
+
+        if (searchToggle.dataset.collapsed == "true") {
+            searchToggle.dataset.collapsed = false;
+            searchToggle.classList.remove('search_toggle--collapsed');
+            searchToggle.innerText = 'Collapse Search';
+            footer.classList.remove('footer--collapse');
+        }
+        else {
+            searchToggle.dataset.collapsed = true;
+            searchToggle.innerText = 'Expand Search';
+            searchToggle.classList.add('search_toggle--collapsed');
+            footer.classList.add('footer--collapse');
+        }
     }
 
 })()
