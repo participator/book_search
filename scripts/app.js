@@ -24,6 +24,7 @@
     exports.searchBooksOnFormSubmitEvent = (event) => {
         event.preventDefault();
         window.scrollTo(0,0);
+        page = 0;
         const logo = document.querySelector('.logo');
         logo.classList.add('logoMove');
 
@@ -66,7 +67,7 @@
     }
 
     exports.isValidUserInput = (userInput) => {
-        const validInputRegEx = /^[\w\$\*\.:!@#&,][\s\w\$\*\.:!@#&,]*$/g;        
+        const validInputRegEx = /^[\S][\s\w\$\*\.:!@#&,'"]*$/g;        
         return validInputRegEx.test(userInput);
     }
 
@@ -80,8 +81,10 @@
     }
 
     exports.callBooksAPI = (userQuery) => {
+        const API_KEY = 'AIzaSyC8YoC2vugrIsUpfieEtNGwdhUDHR8WKQ0';
+        const startIndex = page <= 0 ? 0 : (page * 10) - 1;
         // TODO: Make query accept users query
-        const booksAPIURL = 'https://www.googleapis.com/books/v1/volumes?q=harry+potter';
+        const booksAPIURL = `https://www.googleapis.com/books/v1/volumes?q=${userQuery.replace(/\s/g, '+')}&printType=books&startIndex=${startIndex}&key=${API_KEY}`;
         
         return fetch(booksAPIURL, {
             method: 'get',
@@ -101,12 +104,12 @@
     exports.createBook = (jsonBook) => {
         const volume = jsonBook.volumeInfo;
         const Book = {
-            author: volume.authors,
-            description: volume.description,
-            title: volume.title,
-            publishingCompany: volume.publisher,
-            image: volume.imageLinks.thumbnail,
-            moreInfoLink: volume.infoLink
+            authors: volume.authors || null,
+            description: volume.description || null,
+            title: volume.title || null,
+            publishingCompany: volume.publisher || null,
+            image: volume.imageLinks && volume.imageLinks.thumbnail || null,
+            moreInfoLink: volume.infoLink || null
         }
 
         return Book;
@@ -124,7 +127,7 @@
 
     exports.createBookElement = (book) => {
         const bookElements = {
-            author: exports.createBookTextElementAndAppendContent('p', book.author.join(', ')),
+            author: exports.createBookTextElementAndAppendContent('p', book.authors),
             description: exports.createBookTextElementAndAppendContent('p', book.description),
             image: exports.createBookImageElement(book.image, book.title),
             moreInfoLink: exports.createBookLinkElement(book.moreInfoLink, 'More Information', 'No more information'),
