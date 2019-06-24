@@ -184,13 +184,23 @@
             bookContainerElement.appendChild(image);
         }
 
-        const detailsElementFront = exports.createBookDetailsFrontContainerElement({author, publishingCompany, title});
-        bookContainerElement.appendChild(detailsElementFront);
-
-        const detailsElementBack = exports.createBookDetailsBackContainerElement({description, moreInfoLink});
-        bookContainerElement.appendChild(detailsElementBack);
+        const bookDetailsElement = exports.createBookDetailsElement({author, description, moreInfoLink, publishingCompany, title});
+        bookContainerElement.appendChild(bookDetailsElement);
 
         return bookContainerElement;
+    }
+
+    exports.createBookDetailsElement = ({author, description, moreInfoLink, publishingCompany, title}) => {
+        const bookDetailsElement = document.createElement('div');
+        bookDetailsElement.classList.add('book_details');        
+
+        const detailsElementFront = exports.createBookDetailsFrontContainerElement({author, publishingCompany, title});
+        bookDetailsElement.appendChild(detailsElementFront);
+
+        const detailsElementBack = exports.createBookDetailsBackContainerElement({description, moreInfoLink});
+        bookDetailsElement.appendChild(detailsElementBack);
+
+        return bookDetailsElement;
     }
 
     exports.createBookDetailsFrontContainerElement = ({author, publishingCompany, title}) => {
@@ -217,6 +227,7 @@
         detailsContainerElement.classList.add('book_details_back');
 
         if (description) {
+            description.classList.add('book_details_back_description');
             detailsContainerElement.appendChild(description);
         }
 
