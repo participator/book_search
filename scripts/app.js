@@ -3,8 +3,6 @@
     const exports = {};
     window.App = exports;
 
-    let page = 0;
-
     window.onload = () => {
         const searchForm = document.forms.bookSearch;
         searchForm.addEventListener('submit', exports.searchBooksOnFormSubmitEvent);
@@ -13,10 +11,14 @@
         searchToggle.addEventListener('click', exports.changeFormState);
     }
 
+
+    let page = 0;
+    let isActive = false;
     window.onscroll = (event) => {
-        if ( (window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+        if ( (window.innerHeight + window.scrollY) >= document.body.offsetHeight && !isActive) {
             
             page++;
+            isActive = true;
             exports.searchBooksOnScrollEvent(event.target.bookSearch.elements.query);
         }
     }
@@ -59,6 +61,7 @@
             const contentElement = document.querySelector('.content');
 
             exports.displayBooks(contentElement, books);
+            isActive = false;
         });
     }
 
