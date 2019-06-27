@@ -87,6 +87,8 @@
     }
     
     Books.createBookObject = (volumeInfo) => {
+        if ( !volumeInfo ) return;
+
         const bookObject = {
             authors: volumeInfo.authors || null,
             description: volumeInfo.description || null,
