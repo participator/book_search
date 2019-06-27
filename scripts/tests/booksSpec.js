@@ -6,18 +6,16 @@ describe('Testing Functionality', function () {
     beforeEach(function() {
         App = window.App;
 
-        mockBookData = {
-            volumeInfo: {
-                authors: 'Book Author',
-                description: 'Book Description',
-                imageLinks: {
-                    thumbnail: 'Book Image'
-                },
-                publisher: 'Book Publisher',
-                title: 'Book Title',
-                infoLink: 'www.google.com'
-            }
-        }
+        mockBookVolumeInfo = {
+            authors: 'Book Author',
+            description: 'Book Description',
+            imageLinks: {
+                thumbnail: 'Book Image'
+            },
+            publisher: 'Book Publisher',
+            title: 'Book Title',
+            infoLink: 'www.books.google.com'
+        };
     
         bookObj = {
             authors: 'Book Author',
@@ -25,12 +23,12 @@ describe('Testing Functionality', function () {
             image: 'Book Image',
             publishingCompany: 'Book Publisher',
             title: 'Book Title',
-            moreInfoLink: 'www.google.com'
+            moreInfoLink: 'www.books.google.com'
         }
     });
     
     it("creates a Book Object", function () {
-        const Book = App.createBook(mockBookData);
+        const Book = Books.createBookObject(mockBookVolumeInfo);
         expect(Book).toEqual(bookObj);
     });
 })
