@@ -76,7 +76,6 @@
 
     Books.parseBooks = (jsonData) => {
         const parsedJsonBooks = jsonData.items;
-
         return parsedJsonBooks;
     }
 
@@ -143,7 +142,7 @@
         const imageElement = document.createElement('img');
         imageElement.alt = altText + ' Image';
         imageElement.classList.add('book_image');
-        imageElement.src = src;
+        imageElement.src = window.location.href.startsWith('https') ? src.replace('http', 'https') : src;
         return imageElement;
     }
 
@@ -153,7 +152,6 @@
         const linkElement = document.createElement('a');
         
         try {
-            url.replace('http', 'https');
             linkElement.href = new URL(url).href;
             linkElement.innerText = successfulInnerText;
             linkElement.target = "_blank";
@@ -165,11 +163,11 @@
         return linkElement;
     }
 
-    Books.createBookContainerElement = ({authorElement, descriptionElement, imageElement, moreInfoLinkElement, publishingCompanyElement, titleElement}) => {
+    Books.createBookContainerElement = ({authorElement, descriptionElement, imageElement, moreInfoLinkElement, publishingCompanyElement, titleElement} = {}) => {
         const bookContainerElement = document.createElement('div');
         bookContainerElement.classList.add('book');
         
-        if (imageElement) {
+        if (imageElement && imageElement instanceof HTMLElement) {
             bookContainerElement.appendChild(imageElement);
         }
 
@@ -179,7 +177,7 @@
         return bookContainerElement;
     }
 
-    Books.createBookDetailsElement = ({authorElement, descriptionElement, moreInfoLinkElement, publishingCompanyElement, titleElement}) => {
+    Books.createBookDetailsElement = ({authorElement, descriptionElement, moreInfoLinkElement, publishingCompanyElement, titleElement} = {}) => {
         const bookDetailsElement = document.createElement('div');
         bookDetailsElement.classList.add('book_details');        
 
@@ -192,35 +190,35 @@
         return bookDetailsElement;
     }
 
-    Books.createBookDetailsFrontContainerElement = ({authorElement, publishingCompanyElement, titleElement}) => {
+    Books.createBookDetailsFrontContainerElement = ({authorElement, publishingCompanyElement, titleElement} = {}) => {
         const detailsFrontContainerElement = document.createElement('div');
         detailsFrontContainerElement.classList.add('book_details_front');
 
-        if (titleElement) {
+        if (titleElement && titleElement instanceof HTMLElement) {
             detailsFrontContainerElement.appendChild(titleElement);
         }
 
-        if (authorElement) {
+        if (authorElement && authorElement instanceof HTMLElement) {
             detailsFrontContainerElement.appendChild(authorElement);
         }
         
-        if (publishingCompanyElement) {
+        if (publishingCompanyElement && publishingCompanyElement instanceof HTMLElement) {
             detailsFrontContainerElement.appendChild(publishingCompanyElement);
         }
 
         return detailsFrontContainerElement;
     }
 
-    Books.createBookDetailsBackContainerElement = ({descriptionElement, moreInfoLinkElement}) => {
+    Books.createBookDetailsBackContainerElement = ({descriptionElement, moreInfoLinkElement} = {}) => {
         const detailsBackContainerElement = document.createElement('div');
         detailsBackContainerElement.classList.add('book_details_back');
 
-        if (descriptionElement) {
+        if (descriptionElement && descriptionElement instanceof HTMLElement) {
             descriptionElement.classList.add('book_details_back_description');
             detailsBackContainerElement.appendChild(descriptionElement);
         }
 
-        if (moreInfoLinkElement) {
+        if (moreInfoLinkElement && moreInfoLinkElement instanceof HTMLElement) {
             detailsBackContainerElement.appendChild(moreInfoLinkElement);
         }
 
