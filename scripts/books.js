@@ -227,27 +227,55 @@
         return detailsBackContainerElement;
     }
 
-    Books.changeSearchFormState = (footerElement, searchToogleElement) => {
-        if (searchToogleElement.dataset.collapsed === "true") {
-            Books.expandSearchForm(footerElement, searchToogleElement);
+    Books.changeSearchFormState = (footerElement, searchToggleElement) => {
+        if (searchToggleElement.dataset.collapsed === "true") {
+            Books.expandSearchForm(footerElement, searchToggleElement);
         }
         else {
-            Books.collapseSearchForm(footerElement, searchToogleElement);
+            Books.collapseSearchForm(footerElement, searchToggleElement);
         }
     }
 
-    Books.expandSearchForm = (footerElement, searchToogleElement) => {
-            searchToogleElement.dataset.collapsed = false;
-            searchToogleElement.classList.remove('search_toggle--collapsed');
-            searchToogleElement.innerText = 'Collapse Search';
-            footerElement.classList.remove('footer--collapsed');
+    Books.expandSearchForm = (footerElement, searchToggleElement) => {
+        if (footerElement && footerElement instanceof HTMLElement) {
+            Books.showExpandStateForFooterElement(footerElement);
+        }
+        if (searchToggleElement && searchToggleElement instanceof HTMLElement) {
+            Books.showExpandStateForSearchToggleElement(searchToggleElement);
+        }
     }
 
-    Books.collapseSearchForm = (footerElement, searchToogleElement) => {
-            searchToogleElement.dataset.collapsed = true;
-            searchToogleElement.classList.add('search_toggle--collapsed');
-            searchToogleElement.innerText = 'Expand Search';
-            footerElement.classList.add('footer--collapsed');
+    Books.collapseSearchForm = (footerElement, searchToggleElement) => {
+        if (footerElement && footerElement instanceof HTMLElement) {
+            Books.showCollapseStateForFooterElement(footerElement);
+        }
+        if (searchToggleElement && searchToggleElement instanceof HTMLElement) {
+            Books.showCollapseStateForSearchToggleElement(searchToggleElement);
+        }
+    }
+
+    Books.showExpandStateForSearchToggleElement = (searchToggleElement) => {
+        if (searchToggleElement && searchToggleElement instanceof HTMLElement === false) return;
+        searchToggleElement.dataset.collapsed = false;
+        searchToggleElement.classList.remove('search_toggle--collapsed');
+        searchToggleElement.innerText = 'Collapse Search';
+    }
+    
+    Books.showExpandStateForFooterElement = (footerElement) => {
+        if (footerElement && footerElement instanceof HTMLElement === false) return;
+        footerElement.classList.remove('footer--collapsed');
+    }
+    
+    Books.showCollapseStateForSearchToggleElement = (searchToggleElement) => {
+        if (searchToggleElement && searchToggleElement instanceof HTMLElement === false) return;
+        searchToggleElement.dataset.collapsed = true;
+        searchToggleElement.classList.add('search_toggle--collapsed');
+        searchToggleElement.innerText = 'Expand Search';
+    }
+    
+    Books.showCollapseStateForFooterElement = (footerElement) => {
+        if (footerElement instanceof HTMLElement === false) return;
+        footerElement.classList.add('footer--collapsed');
     }
 
 })()
