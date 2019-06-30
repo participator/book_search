@@ -184,6 +184,7 @@
             linkElement.href = encodedUrl;
         }
         linkElement.target = "_blank";
+        linkElement.rel = "noopener";
 
         return linkElement;
     }
@@ -192,10 +193,10 @@
         if (!url) return;
 
         let httpsUrl;
-        if (pageUrl && pageUrl.startsWith('https')) {
+        if (pageUrl && !pageUrl.startsWith('https')) {
             httpsUrl = Books.replaceHttpWithHttps(url);
         }
-        else if (window.location.href.startsWith('https')) {
+        else if (!window.location.href.startsWith('https')) {
             httpsUrl = Books.replaceHttpWithHttps(url);
         }
         return httpsUrl;

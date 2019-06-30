@@ -1,4 +1,5 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="scripts/books.js" type="application/javascript"></script>
@@ -21,7 +22,8 @@
         <form class="search_form" name="bookSearch">
           <div class="search_form_invalidMessage hideVisibility">Invalid User Input</div>
           <div class="search_form_inputs">
-            <input class="search_form_input" type="text" name="query" placeholder="Enter search...">
+            <label class="visuallyhidden" for="searchInput">Enter terms to search</label>
+            <input id="searchInput" class="search_form_input" type="text" name="query" placeholder="Enter search...">
             <button class="search_form_submitButton" name="submit" type="submit">Search</button>
           </div>
         </form>
