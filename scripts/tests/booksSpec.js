@@ -135,7 +135,7 @@ describe("createBookImageElement method", function() {
 
         it("return element with href as https", function() {
             const element = Books.createBookImageElement(src, description, textAppendedAtEndOfDescription, fakePageUrl);
-            expect(element.src === src.replace('http','https')).toBe(true);
+            expect(element.src === src).toBe(true);
         })
     })
 })

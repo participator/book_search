@@ -193,16 +193,16 @@
         if (!url) return;
 
         let httpsUrl;
-        if (pageUrl && !pageUrl.startsWith('https')) {
+        if (pageUrl && !pageUrl.startsWith('https:')) {
             httpsUrl = Books.replaceHttpWithHttps(url);
         }
-        else if (!window.location.href.startsWith('https')) {
+        else if (!window.location.href.startsWith('https:')) {
             httpsUrl = Books.replaceHttpWithHttps(url);
         }
         return httpsUrl;
     }
 
-    Books.replaceHttpWithHttps = url => url.replace('http', 'https');
+    Books.replaceHttpWithHttps = url => url.replace('http:', 'https:');
 
     Books.validateUrl = url => new URL(url).href;
 
