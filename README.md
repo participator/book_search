@@ -25,6 +25,7 @@ Use [Book Search](https://participator.github.io/book_search/index.html)
     - Add animations/transitions
 - Research and Add Test
     - Chose Jasmine as testing framework as it appears to work in the browser
+    - See [Book Search Test](https://participator.github.io/book_search/bookTest.html)
 
 # Clarafications
 - No public data is required
