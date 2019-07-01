@@ -17,6 +17,9 @@
     .book {
         width: 45%;
     }
+    .book_details_back_description {
+        line-height: 1.5em;
+    }
 }
 
 @media screen and (max-width: 426px) {

@@ -1,3 +1,45 @@
+describe("displayBooks method", function() {
+    let books,
+        contentElement;
+
+    beforeEach(function () {
+        books = [{ authors: ['Random', 'Random'] }];
+        contentElement = document.createElement('div');
+    })
+
+    it("not given anything, return undefined", function () {
+        const element = Books.displayBooks();
+        expect(element === undefined).toBe(true);
+    })
+
+    it("only given contentElement, return undefined", function () {
+        const element = Books.displayBooks(contentElement);
+        expect(element === undefined).toBe(true);
+    })
+
+    it("only given books, return undefined", function () {
+        const element = Books.displayBooks(undefined, books);
+        expect(element === undefined).toBe(true);
+    })
+
+    describe("given expected arguments", function() {
+        let books,
+        contentElement;
+
+        beforeEach(function() {
+            books = [{
+                authors: ['Random', 'Random'], 
+            }];
+            contentElement = document.createElement('div');
+            Books.displayBooks(contentElement, books);
+        })
+        
+        it("append 1 child to contentElement", function() {
+            expect(contentElement.children.length).toBe(1);
+        })
+    })
+})
+
 describe("createBookElement method", function() {
     describe("not given anything", function() {
         it("return undefined", function() {
@@ -19,6 +61,128 @@ describe("createBookElement method", function() {
             expect(element === undefined).toBe(true);
         })
     })
+
+    describe("given an object with authors", function() {
+        let book,
+        element;
+
+        beforeEach(function() {
+            book = {
+                authors: ['Random, Random']
+            };
+            element = Books.createBookElement(book);
+        })
+
+        it("return HTMLDivElement", function() {
+            expect(element instanceof HTMLDivElement).toBe(true);
+        })
+
+        it("return element with one child", function() {
+            expect(element.children.length).toBe(1);
+        })
+    })
+
+    describe("given an object with a description", function() {
+        let book,
+        element;
+
+        beforeEach(function() {
+            book = {
+                description: ['Random, Random']
+            };
+            element = Books.createBookElement(book);
+        })
+
+        it("return HTMLDivElement", function() {
+            expect(element instanceof HTMLDivElement).toBe(true);
+        })
+
+        it("return element with one child", function() {
+            expect(element.children.length).toBe(1);
+        })
+    })
+
+    describe("given an object with image", function() {
+        let book,
+        element;
+
+        beforeEach(function() {
+            book = {
+                image: 'https://fakeimg.pl/128x125/?text=Hello'
+            };
+            element = Books.createBookElement(book);
+        })
+
+        it("return HTMLDivElement", function() {
+            expect(element instanceof HTMLDivElement).toBe(true);
+        })
+
+        it("return element with one child", function() {
+            expect(element.children.length).toBe(1);
+        })
+    })
+
+    describe("given an object with moreInfoLink", function() {
+        let book,
+        element;
+
+        beforeEach(function() {
+            book = {
+                moreInfoLink: ['Random, Random']
+            };
+            element = Books.createBookElement(book);
+        })
+
+        it("return HTMLDivElement", function() {
+            expect(element instanceof HTMLDivElement).toBe(true);
+        })
+
+        it("return element with one child", function() {
+            expect(element.children.length).toBe(1);
+        })
+    })
+
+    describe("given an object with publishingCompany", function() {
+        let book,
+        element;
+
+        beforeEach(function() {
+            book = {
+                publishingCompany: 'Random'
+            };
+            element = Books.createBookElement(book);
+        })
+
+        it("return HTMLDivElement", function() {
+            expect(element instanceof HTMLDivElement).toBe(true);
+        })
+
+        it("return element with one child", function() {
+            expect(element.children.length).toBe(1);
+        })
+    })
+
+    describe("given an object with title", function() {
+        let book,
+        element;
+
+        beforeEach(function() {
+            book = {
+                title: 'Random'
+            };
+            element = Books.createBookElement(book);
+        })
+
+        it("return HTMLDivElement", function() {
+            expect(element instanceof HTMLDivElement).toBe(true);
+        })
+
+        it("return element with one child", function() {
+            expect(element.children.length).toBe(1);
+        })
+    })
+
+
 })
 
 describe("createBookTextElementAndAppendContent", function() {

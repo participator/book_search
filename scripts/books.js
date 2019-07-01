@@ -101,14 +101,18 @@
     }
 
     Books.clearBooks = (contentElement) => {
+        if (!contentElement) return;
         contentElement.innerHTML = "";
     }
 
     Books.displayBooks = (contentElement, books) => {
+        if (!contentElement || !books || !books.length) return;
+        
         let fragmentElement = document.createDocumentFragment();
         books.forEach(book => {
             fragmentElement.appendChild(Books.createBookElement(book));
         })
+
         contentElement.appendChild(fragmentElement);
     }
 
@@ -116,7 +120,7 @@
         if (!book || book.isEmpty()) return;
 
         const bookElements = {
-            authorElement: Books.createBookTextElementAndAppendContent('p', book.authors),
+            authorElement: Books.createBookAuthorElementAndAppendContent('p', book.authors),
             descriptionElement: Books.createBookTextElementAndAppendContent('p', book.description),
             imageElement: Books.createBookImageElement(book.image, book.title, "Image"),
             moreInfoLinkElement: Books.createBookLinkElement(book.moreInfoLink, 'More Information', 'No more information'),
@@ -129,6 +133,12 @@
         const bookElement = Books.createBookContainerElement(bookElements);
 
         return bookElement;
+    }
+
+    Books.createBookAuthorElementAndAppendContent = (type, content) => {
+        if (content) {
+            return Books.createBookTextElementAndAppendContent(type, content.join(', '));
+        }
     }
 
     Books.createBookTextElementAndAppendContent = (type, content) => {

@@ -80,7 +80,6 @@ header {
     margin: 0.5em;
 }
 .book_details {
-    position: relative;
     transition: transform 2s 1s;
     transform-style: preserve-3d;
     flex-grow: 1;
@@ -99,17 +98,22 @@ header {
     overflow-y: auto;
 }
 .book_details_back {
-    position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
     background-color: var(--bookSearch_white);;
     backface-visibility: hidden;
     transform: rotateY(180deg);
-    padding-left: 1em;
-    padding-right: 1em;
+    padding-bottom: 1em;
     height: 100%;
     width: 100%;
 }
 .book_details_back_description {
     height: 75%;
+    line-height: 1.7em;
+    padding: 0 0.5em;
+    overflow-x: hidden;
     overflow-y: auto;
 }
 footer {
