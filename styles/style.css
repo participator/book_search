@@ -27,23 +27,22 @@ header {
     position: fixed;
 }
 .logoMove {
+    -moz-animation: minimizeToCorner 1s forwards;
+    -webkit-animation: minimizeToCorner 1s forwards;
     animation: minimizeToCorner 1s forwards;
 }
-@keyframes minimizeToCorner {
+@-webkit-keyframes minimizeToCorner {
     0% {
         width: initial;
         background: none;
     }
     25% {
         width: initial;
+        -moz-transform: rotate(90deg);
+        -webkit-transform: rotate(90deg);
         transform: rotate(90deg);
-        background: none;
     }
-    50% {
-        width: initial;
-        background: none;
-    }
-    75% {
+    99% {
         width: initial;
         background: none;
     }
@@ -55,6 +54,36 @@ header {
         left: 0;
         padding: 0.2em 0 0 0.2em;
         width: 100%;
+        -moz-transform: rotate(360deg);
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+@keyframes minimizeToCorner {
+    0% {
+        width: initial;
+        background: none;
+    }
+    25% {
+        width: initial;
+        -moz-transform: rotate(90deg);
+        -webkit-transform: rotate(90deg);
+        transform: rotate(90deg);
+    }
+    99% {
+        width: initial;
+        background: none;
+    }
+    100% {
+        background-color: var(--bookSearch_white);;
+        font-size: 1.5em;
+        position: fixed;
+        top: 0;
+        left: 0;
+        padding: 0.2em 0 0 0.2em;
+        width: 100%;
+        -moz-transform: rotate(360deg);
+        -webkit-transform: rotate(360deg);
         transform: rotate(360deg);
     }
 }
@@ -80,11 +109,17 @@ header {
     margin: 0.5em;
 }
 .book_details {
+    -moz-transition: transform 2s 1s;
+    -webkit-transition: transform 2s 1s;
     transition: transform 2s 1s;
+    -moz-transform-style: preserve-3d;
+    -webkit-transform-style: preserve-3d;
     transform-style: preserve-3d;
     flex-grow: 1;
 }
 .book_details:hover {
+    -moz-transform: rotateY(180deg);
+    -webkit-transform: rotateY(180deg);
     transform: rotateY(180deg);
 }
 .book_details_front {
@@ -104,6 +139,8 @@ header {
     align-items: center;
     background-color: var(--bookSearch_white);;
     backface-visibility: hidden;
+    -moz-transform: rotateY(180deg);
+    -webkit-transform: rotateY(180deg);
     transform: rotateY(180deg);
     padding-bottom: 1em;
     height: 100%;
@@ -122,6 +159,8 @@ footer {
     position: fixed;
     bottom: 0;
     width: 50%;
+    -moz-transition: bottom .5s ease-in-out;
+    -webkit-transition: bottom .5s ease-in-out;
     transition: bottom .5s ease-in-out;
     
 }
