@@ -21,9 +21,8 @@
 
     Books.getUserInput = (inputElement) => {
         if (!inputElement ||
-            !inputElement instanceof HTMLInputElement) 
+            !inputElement instanceof HTMLElement) 
             return;
-
         return inputElement.value;
     }
 
@@ -42,27 +41,18 @@
     }
 
     Books.unhideThenHideInvalidUserInputMessageAfterXms = (invalidUserInputMessageElement, hideAferXms) => {
-        if (!invalidUserInputMessageElement ||
-            !invalidUserInputMessageElement instanceof HTMLElement) 
-            return;
-
         Books.unhideInvalidUserInputMessage(invalidUserInputMessageElement);
+
         setTimeout(function() {
             Books.hideInvalidUserInputMessage(invalidUserInputMessageElement);
         }, hideAferXms);
     }
 
     Books.unhideInvalidUserInputMessage = (invalidUserInputMessageElement) => {
-        if (!invalidUserInputMessageElement ||
-            !invalidUserInputMessageElement instanceof HTMLElement) 
-            return;
         invalidUserInputMessageElement.classList.remove('hideVisibility');
     }
 
     Books.hideInvalidUserInputMessage = (invalidUserInputMessageElement) => {
-        if (!invalidUserInputMessageElement ||
-            !invalidUserInputMessageElement instanceof HTMLElement) 
-            return;
         invalidUserInputMessageElement.classList.add('hideVisibility');
     }
 
@@ -139,17 +129,10 @@
     }
 
     Books.clearBooks = (contentElement) => {
-        if (!contentElement || 
-            !contentElement instanceof HTMLElement) return;
         contentElement.innerHTML = "";
     }
 
     Books.displayBooks = (contentElement, books) => {
-        if (!contentElement || 
-            !contentElement instanceof HTMLElement || 
-            !books || 
-            !books.length) return;
-        
         let fragmentElement = document.createDocumentFragment();
         books.forEach(book => {
             fragmentElement.appendChild(Books.createBookElement(book));
@@ -178,9 +161,8 @@
     }
 
     Books.createBookAuthorElementAndAppendContent = (type, content) => {
-        if (content) {
-            return Books.createBookTextElementAndAppendContent(type, content.join(', '));
-        }
+        if (!content || !Array.isArray(content)) return;
+        return Books.createBookTextElementAndAppendContent(type, content.join(', '));
     }
 
     Books.createBookTextElementAndAppendContent = (type, content) => {
@@ -361,44 +343,32 @@
     }
 
     Books.expandSearchForm = (footerElement, searchToggleElement) => {
-        if (footerElement && footerElement instanceof HTMLElement) {
-            Books.showExpandStateForFooterElement(footerElement);
-        }
-        if (searchToggleElement && searchToggleElement instanceof HTMLElement) {
-            Books.showExpandStateForSearchToggleElement(searchToggleElement);
-        }
+        Books.showExpandStateForFooterElement(footerElement);
+        Books.showExpandStateForSearchToggleElement(searchToggleElement);
     }
 
     Books.collapseSearchForm = (footerElement, searchToggleElement) => {
-        if (footerElement && footerElement instanceof HTMLElement) {
-            Books.showCollapseStateForFooterElement(footerElement);
-        }
-        if (searchToggleElement && searchToggleElement instanceof HTMLElement) {
-            Books.showCollapseStateForSearchToggleElement(searchToggleElement);
-        }
+        Books.showCollapseStateForFooterElement(footerElement);
+        Books.showCollapseStateForSearchToggleElement(searchToggleElement);
     }
 
     Books.showExpandStateForSearchToggleElement = (searchToggleElement) => {
-        if (searchToggleElement && searchToggleElement instanceof HTMLElement === false) return;
         searchToggleElement.dataset.collapsed = false;
         searchToggleElement.classList.remove('search_toggle--collapsed');
         searchToggleElement.innerText = 'Collapse Search';
     }
     
     Books.showExpandStateForFooterElement = (footerElement) => {
-        if (footerElement && footerElement instanceof HTMLElement === false) return;
         footerElement.classList.remove('footer--collapsed');
     }
     
     Books.showCollapseStateForSearchToggleElement = (searchToggleElement) => {
-        if (searchToggleElement && searchToggleElement instanceof HTMLElement === false) return;
         searchToggleElement.dataset.collapsed = true;
         searchToggleElement.classList.add('search_toggle--collapsed');
         searchToggleElement.innerText = 'Expand Search';
     }
     
     Books.showCollapseStateForFooterElement = (footerElement) => {
-        if (footerElement instanceof HTMLElement === false) return;
         footerElement.classList.add('footer--collapsed');
     }
 

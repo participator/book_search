@@ -127,16 +127,6 @@ describe("unhideThenHideInvalidUserInputMessageAfterXms", function() {
 })
 
 describe("unhideInvalidUserInputMessage", function() {
-    it("not given anything, do not error", function() {
-        Books.unhideInvalidUserInputMessage();
-        expect(true).toBe(true);
-    })
-
-    it("not given a HTMLElement, do not error", function() {
-        Books.unhideInvalidUserInputMessage('');
-        expect(true).toBe(true);
-    })
-
     it("given an HTMLElement, add class hideVisibility", function() {
         let element = document.createElement('div');
         Books.unhideInvalidUserInputMessage(element);
@@ -145,16 +135,6 @@ describe("unhideInvalidUserInputMessage", function() {
 })
 
 describe("hideInvalidUserInputMessage method", function() {
-    it("not given anything, do not error", function() {
-        Books.hideInvalidUserInputMessage();
-        expect(true).toBe(true);
-    })
-
-    it("not given a HTMLElement, do not error", function() {
-        Books.hideInvalidUserInputMessage('');
-        expect(true).toBe(true);
-    })
-
     it("given an HTMLElement, add class hideVisibility", function() {
         let element = document.createElement('div');
         Books.hideInvalidUserInputMessage(element);
@@ -439,21 +419,6 @@ describe("displayBooks method", function() {
     beforeEach(function () {
         books = [{ authors: ['Random', 'Random'] }];
         contentElement = document.createElement('div');
-    })
-
-    it("not given anything, return undefined", function () {
-        const element = Books.displayBooks();
-        expect(element).toBe(undefined);
-    })
-
-    it("only given contentElement, return undefined", function () {
-        const element = Books.displayBooks(contentElement);
-        expect(element).toBe(undefined);
-    })
-
-    it("only given books, return undefined", function () {
-        const element = Books.displayBooks(undefined, books);
-        expect(element).toBe(undefined);
     })
 
     describe("given expected arguments", function() {
@@ -1229,99 +1194,156 @@ describe("createBookDetailsBackContainerElement method", function() {
     })
 })
 
-describe("collapseSearchForm method", function() {
+describe("collapseSearchForm method", function () {
     let Books,
-    footerElement,
-    searchToggleElement;
+        footerElement,
+        searchToggleElement;
 
-    beforeEach(function() {
+    beforeEach(function () {
         Books = window.Books;
         footerElement = document.createElement('footer');
         searchToggleElement = document.createElement('button');
     })
 
-    describe("given a HTMLELEMENT for the footerElement parameter", function() {
-        it("add footer--collapsed class to footerElement", function() {
-            Books.collapseSearchForm(footerElement);
+    describe("given a HTMLELEMENT for the footerElement parameter and for the searchToggleElement parameter", function () {
+        it("add footer--collapsed class to footerElement", function () {
+            Books.collapseSearchForm(footerElement, searchToggleElement);
             expect(footerElement.classList.contains('footer--collapsed')).toBe(true);
         })
-    })
 
-    describe("given a HTMLElement for the searchToggleElement parameter", function() {
-        it("set dataset.collapsed attribute to true", function() {
-            Books.collapseSearchForm(undefined, searchToggleElement);
-            expect(searchToggleElement.dataset.collapsed).toBe("true");
-        })
-    
-        it("add search_toggle--collapsed class to searchToggleElement", function() {
-            Books.collapseSearchForm(undefined, searchToggleElement);
+        it("add search_toggle--collapsed class to searchToggleElement", function () {
+            Books.collapseSearchForm(footerElement, searchToggleElement);
             expect(searchToggleElement.classList.contains('search_toggle--collapsed')).toBe(true);
         })
-    
-        it("set innerText of searchToggleElement to 'Expand Search'", function() {
-            Books.collapseSearchForm(undefined, searchToggleElement);
+
+        it("set dataset.collapsed attribute to true on searchToggleElement", function () {
+            Books.collapseSearchForm(footerElement, searchToggleElement);
+            expect(searchToggleElement.dataset.collapsed).toBe("true");
+        })
+
+        it("set innerText of searchToggleElement to 'Expand Search'", function () {
+            Books.collapseSearchForm(footerElement, searchToggleElement);
             expect(searchToggleElement.innerText).toBe('Expand Search');
         })
     })
 })
 
 describe("expandSearchForm method", function() {
+    let footerElement,
+    searchToggleElement;
+
     beforeEach(function() {
         footerElement = document.createElement('footer');
         searchToggleElement = document.createElement('button');
-        Books.collapseSearchForm(footerElement);
+        Books.collapseSearchForm(footerElement, searchToggleElement);
     })
 
-    describe("given a HTMLELEMENT for the footerElement parameter", function() {
+    describe("given a HTMLELEMENT for the footerElement parameter and for the searchToggleElement parameter", function() {
         it("with class 'footer--collapsed', remove footer--collapsed class to footerElement", function() {
-            Books.expandSearchForm(footerElement);
+            Books.expandSearchForm(footerElement, searchToggleElement);
             expect(footerElement.classList.contains('footer--collapsed')).toBe(false);
         })
-    })
 
-    describe("given a HTMLElement for the searchToggleElement parameter", function() {
         it("set dataset.collapsed attribute to false", function() {
-            Books.expandSearchForm(undefined, searchToggleElement);
+            Books.expandSearchForm(footerElement, searchToggleElement);
             expect(searchToggleElement.dataset.collapsed).toBe("false");
         })
     
         it("remove search_toggle--collapsed class to searchToggleElement", function() {
-            Books.expandSearchForm(undefined, searchToggleElement);
+            Books.expandSearchForm(footerElement, searchToggleElement);
             expect(searchToggleElement.classList.contains('search_toggle--collapsed')).toBe(false);
         })
     
         it("set innerText of searchToggleElement to 'Collapse Search'", function() {
-            Books.expandSearchForm(undefined, searchToggleElement);
+            Books.expandSearchForm(footerElement, searchToggleElement);
             expect(searchToggleElement.innerText).toBe('Collapse Search');
         })
     })
 })
 
 describe('showExpandStateForSearchToggleElement method', function() {
-    it("given a non-HTMLElement, do not set searchToggleElement's data.collapsed attribute to false", function() {
-        const emptyObject = {}
-        Books.showExpandStateForSearchToggleElement(emptyObject)
-        expect(emptyObject).toEqual({})
-    })
-
     describe('given a HTMLElement', function() {
         beforeEach(function() {
             searchToggleElement = document.createElement('button');
+            Books.showCollapseStateForSearchToggleElement(searchToggleElement);
+        })
+
+        it("set dataset.collapsed attribute to false", function() {
+            Books.showExpandStateForSearchToggleElement(searchToggleElement);
+            expect(searchToggleElement.dataset.collapsed).toBe('false');
+        })
+    
+        it("remove search_toggle--collapsed class to searchToggleElement", function() {
+            Books.showExpandStateForSearchToggleElement(searchToggleElement);
+            expect(searchToggleElement.classList.contains('search_toggle--collapsed')).toBe(false);
+        })
+    
+        it("set innerText of searchToggleElement to 'Collapse Search'", function() {
+            Books.showExpandStateForSearchToggleElement(searchToggleElement);
+            expect(searchToggleElement.innerText).toBe('Collapse Search');
+        })
+    })
+})
+
+describe('showExpandStateForFooterElement method', function() {
+    describe('given a HTMLElement', function() {
+        beforeEach(function() {
+            footerToggleElement = document.createElement('button');
+            Books.showCollapseStateForFooterElement(footerToggleElement);
+        })
+    
+        it("remove footer--collapsed class to footerToggleElement", function() {
+            Books.showExpandStateForFooterElement(footerToggleElement);
+            expect(footerToggleElement.classList.contains('footer--collapsed')).toBe(false);
+        })
+    })
+})
+
+describe('showCollapseStateForSearchToggleElement method', function() {
+    describe('given a HTMLElement', function() {
+        beforeEach(function() {
+            searchToggleElement = document.createElement('button');
+            Books.showExpandStateForSearchToggleElement(searchToggleElement);
         })
 
         it("set dataset.collapsed attribute to true", function() {
-            Books.collapseSearchForm(undefined, searchToggleElement);
-            expect(searchToggleElement.dataset.collapsed).toBe("true");
+            Books.showCollapseStateForSearchToggleElement(searchToggleElement);
+            expect(searchToggleElement.dataset.collapsed).toBe('true');
         })
     
         it("add search_toggle--collapsed class to searchToggleElement", function() {
-            Books.collapseSearchForm(undefined, searchToggleElement);
+            Books.showCollapseStateForSearchToggleElement(searchToggleElement);
             expect(searchToggleElement.classList.contains('search_toggle--collapsed')).toBe(true);
         })
     
         it("set innerText of searchToggleElement to 'Expand Search'", function() {
-            Books.collapseSearchForm(undefined, searchToggleElement);
+            Books.showCollapseStateForSearchToggleElement(searchToggleElement);
             expect(searchToggleElement.innerText).toBe('Expand Search');
         })
+    })
+})
+
+describe('showCollapseStateForFooterElement method', function() {
+    describe('given a HTMLElement', function() {
+        beforeEach(function() {
+            footerToggleElement = document.createElement('button');
+            Books.showExpandStateForFooterElement(footerToggleElement);
+        })
+    
+        it("add footer--collapsed class to footerToggleElement", function() {
+            Books.showCollapseStateForFooterElement(footerToggleElement);
+            expect(footerToggleElement.classList.contains('footer--collapsed')).toBe(true);
+        })
+    })
+})
+
+describe('Object is empty method', function() {
+    it('given empty object, return true', function() {
+        const obj = {};
+        expect(obj.isEmpty()).toBe(true);
+    })
+    it('given non-empty object, return true', function() {
+        const obj = {a: 1};
+        expect(obj.isEmpty()).toBe(false);
     })
 })
