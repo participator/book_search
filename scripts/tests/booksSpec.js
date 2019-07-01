@@ -1,3 +1,437 @@
+describe("moveLogoToPageTop method", function() {
+    it("given an HTMLElement, add class 'logoMove'", function() {
+        const element = document.createElement('div');
+        Books.moveLogoToPageTop(element);
+        expect(element.classList.contains('logoMove')).toBe(true);
+    })
+})
+
+describe("getUserInput method", function() {
+    it("not given anything, return undefined", function() {
+        const userInput = Books.getUserInput();
+        expect(userInput).toBe(undefined);
+    })
+
+    it("not given a HTMLInputElement, return undefined", function() {
+        const inputElement = '';
+        const userInput = Books.getUserInput(inputElement);
+        expect(userInput).toBe(undefined);
+    })
+
+    it("given a HTMLInputElement, return text of element", function() {
+        const text = 'inside no more';
+        const inputElement = document.createElement('input');
+        inputElement.value = text;
+        const userInput = Books.getUserInput(inputElement);
+
+        expect(userInput).toBe(text);
+    })
+    
+})
+
+describe("isSearchFormUserInputValid method", function() {
+    it('not given anything return undefined', function() {
+        const isValid = Books.isSearchFormUserInputValid();
+        expect(isValid).toBe(undefined);
+    })
+
+    it('not given valid input, return false', function() {
+        const input = ' 12321312';
+        const isValid = Books.isSearchFormUserInputValid(input);
+        expect(isValid).toBe(false);
+    })
+
+    it('given valid input, return true', function() {
+        const input = 'a12321312';
+        const isValid = Books.isSearchFormUserInputValid(input);
+        expect(isValid).toBe(true);
+    })
+})
+
+describe("isUserInputValid method", function() {
+
+    it("not given anything, return undefined", function () {
+        const isUserInputValid = Books.isUserInputValid();
+        expect(isUserInputValid).toBe(undefined);
+    })
+
+    it("not given a RegEx type, return undefined", function () {
+        let regexPatternToMatch = '',
+            userInput = '';
+
+        const isUserInputValid = Books.isUserInputValid(regexPatternToMatch, userInput);
+        expect(isUserInputValid).toBe(undefined);
+    })
+
+    it("not given userInput, return undefined", function () {
+        let regexPatternToMatch,
+            userInput;
+
+        const isUserInputValid = Books.isUserInputValid(regexPatternToMatch);
+        expect(isUserInputValid).toBe(undefined);
+    })
+
+    it("given regex with matching data, return true", function() {
+        let regexPatternToMatch = /abc/g,
+            userInput = 'My favorite three letters are: abc. However, I have three more too.';
+
+            const isUserInputValid = Books.isUserInputValid(regexPatternToMatch, userInput);
+            expect(isUserInputValid).toBe(true);
+    })
+
+    it("given regex with nonmatching data, return false", function() {
+        let regexPatternToMatch = /abc/g,
+            userInput = 'My favorite three letters are: def. However, I have three more too.';
+
+            const isUserInputValid = Books.isUserInputValid(regexPatternToMatch, userInput);
+            expect(isUserInputValid).toBe(false);
+    })
+})
+
+describe("unhideThenHideInvalidUserInputMessageAfterXms", function() {
+
+    it("not given a ms, add then remove class hideVisibility", function() {
+        const element = document.createElement('div');
+        Books.unhideThenHideInvalidUserInputMessageAfterXms(element);
+        expect(element.classList.contains('hideVisibility')).toBe(false);
+    })
+
+    describe("given an HTMLElement and ms", function() {
+        let asyncFunction = (callback, ms) => {
+            setTimeout(function() {
+                callback();
+            }, ms)
+        }
+        
+        beforeEach(function() {
+            jasmine.clock().install();
+        })
+
+        afterEach(function() {
+            jasmine.clock().uninstall();
+        })
+
+        xit("after x ms remove class hideVisibility", function() {
+            let element = document.createElement('div');
+            let ms = 100000;
+            
+            Books.unhideThenHideInvalidUserInputMessageAfterXms(element, ms);
+            expect(element.classList.contains('hideVisibility')).toBe(true);
+
+            const callback = jasmine.createSpy('callback');
+            asyncFunction(callback, ms);
+            jasmine.clock().tick(ms);
+            expect(element.classList.contains('hideVisiblity')).toBe(false);
+        })
+    })
+})
+
+describe("unhideInvalidUserInputMessage", function() {
+    it("not given anything, do not error", function() {
+        Books.unhideInvalidUserInputMessage();
+        expect(true).toBe(true);
+    })
+
+    it("not given a HTMLElement, do not error", function() {
+        Books.unhideInvalidUserInputMessage('');
+        expect(true).toBe(true);
+    })
+
+    it("given an HTMLElement, add class hideVisibility", function() {
+        let element = document.createElement('div');
+        Books.unhideInvalidUserInputMessage(element);
+        expect(element.classList.contains('hideVisibility')).toBe(false);
+    })
+})
+
+describe("hideInvalidUserInputMessage method", function() {
+    it("not given anything, do not error", function() {
+        Books.hideInvalidUserInputMessage();
+        expect(true).toBe(true);
+    })
+
+    it("not given a HTMLElement, do not error", function() {
+        Books.hideInvalidUserInputMessage('');
+        expect(true).toBe(true);
+    })
+
+    it("given an HTMLElement, add class hideVisibility", function() {
+        let element = document.createElement('div');
+        Books.hideInvalidUserInputMessage(element);
+        expect(element.classList.contains('hideVisibility')).toBe(true);
+    })
+})
+
+describe("getPageStartIndex method", function() {
+    it("not given anything", function() {
+        const startIndex = Books.getPageStartIndex();
+        expect(startIndex).toBe(0);
+    })
+    
+    it("not given a number", function() {
+        const startIndex = Books.getPageStartIndex('');
+        expect(startIndex).toBe(0);
+    })
+    
+    it("given a negative number", function() {
+        const startIndex = Books.getPageStartIndex(-2019);
+        expect(startIndex).toBe(0);
+    })
+
+    it("given a positive number", function() {
+        const startIndex = Books.getPageStartIndex(10);
+        const expected = (10 * 10) - 1;
+        expect(startIndex).toBe(expected);
+    })
+    
+})
+
+describe("createBooksAPIURL method", function() {
+    it("not given anything, return undefined", function() {
+        const booksAPIURL = Books.createBooksAPIURL();
+        expect(booksAPIURL).toBe(undefined);
+    })
+
+    describe("not given expected data", function() {
+        let parameters;
+
+        it("userQuery is undefined, return undefined", function() {
+            parameters = [undefined, 'akdjalj', 0];
+            const booksAPIURL = Books.createBooksAPIURL(...parameters);
+            expect(booksAPIURL).toBe(undefined);
+        })
+
+        it("API_KEY is undefined, return undefined", function() {
+            parameters = ['book search', undefined, 0];
+            const booksAPIURL = Books.createBooksAPIURL(...parameters);
+            expect(booksAPIURL).toBe(undefined);
+        })
+
+        it("pageStartIndex is less than 0, return undefined", function() {
+            parameters = ['book search', undefined, 0];
+            const booksAPIURL = Books.createBooksAPIURL(...parameters);
+            expect(booksAPIURL).toBe(undefined);
+        })
+        
+    })
+
+    describe("given expected data", function() {
+        let parameters,
+        booksAPIURL;
+
+        beforeEach(function() {
+            parameters = ['book search', 'akdjalj', 0];
+            booksAPIURL = Books.createBooksAPIURL(...parameters);
+        })
+
+        it("replace query parameter's spaces with '+'", function() {
+            expected = "q=book+search&";
+            expect(booksAPIURL.includes(expected)).toBe(true);
+        })
+
+        it("return correct url", function() {
+            expected = 'https://www.googleapis.com/books/v1/volumes?q=book+search&printType=books&startIndex=0&key=akdjalj';
+            expect(booksAPIURL).toBe(expected);
+        })
+    })
+})
+
+describe("parseBooks method", function() {
+    it("not given anything, return undefined", function() {
+        const parseBooks = Books.parseBooks();
+        expect(parseBooks).toBe(undefined);
+    })
+
+    it("given an object without items property defined, return undefined", function() {
+        const mockJsonData = { title: "" };
+        const parseBooks = Books.parseBooks(mockJsonData);
+        
+        expect(parseBooks).toBe(undefined);
+    })
+
+    it("given an object without items property as an Array, return undefined", function() {
+        const mockJsonData = { items: "" };
+        const parseBooks = Books.parseBooks(mockJsonData);
+        
+        expect(parseBooks).toBe(undefined);
+    })
+
+    it("given object with items property as an Array, returns items property", function() {
+        const mockJsonData = {
+            items: [
+                {
+                    volumeInfo: {
+                        authors: 'Book Author',
+                        description: 'Book Description',
+                        imageLinks: {
+                            thumbnail: 'Book Image'
+                        },
+                        publisher: 'Book Publisher',
+                        title: 'Book Title',
+                        infoLink: 'www.books.google.com'
+                    },
+                    volumeInfo: {
+                        authors: 'Book Author',
+                        description: 'Book Description',
+                        imageLinks: {
+                            thumbnail: 'Book Image'
+                        },
+                        publisher: 'Book Publisher',
+                        title: 'Book Title',
+                        infoLink: 'www.books.google.com'
+                    }
+                }
+            ]
+        };
+
+        const books =  [
+            {
+                volumeInfo: {
+                    authors: 'Book Author',
+                    description: 'Book Description',
+                    imageLinks: {
+                        thumbnail: 'Book Image'
+                    },
+                    publisher: 'Book Publisher',
+                    title: 'Book Title',
+                    infoLink: 'www.books.google.com'
+                },
+                volumeInfo: {
+                    authors: 'Book Author',
+                    description: 'Book Description',
+                    imageLinks: {
+                        thumbnail: 'Book Image'
+                    },
+                    publisher: 'Book Publisher',
+                    title: 'Book Title',
+                    infoLink: 'www.books.google.com'
+                }
+            }
+        ]
+
+        const parsedBooks = Books.parseBooks(mockJsonData);
+        expect(parsedBooks).toEqual(books);
+    })
+})
+
+describe("createBookObjects method", function() {
+    it("not given anything, return undefined", function() {
+        const bookObjects = Books.createBookObjects();
+        expect(bookObjects).toBe(undefined);
+    })
+    it("not given an Array, return undefined", function() {
+        const bookObjects = Books.createBookObjects('');
+        expect(bookObjects).toBe(undefined);
+    })
+    it("given an empty Array, return an empty Array", function() {
+        const bookObjects = Books.createBookObjects([]);
+        expect(bookObjects.length).toEqual(0);
+    })
+    
+    describe("given array of expected data", function() {
+        let mockBookData = [
+            {
+                authors: 'Book Author',
+                description: null,
+                title: null,
+                publishingCompany: null,
+                image: null,
+                moreInfoLink: null
+            },
+            {
+                authors: 'Book Author',
+                description: 'Book Description',
+                imageLinks: {
+                    thumbnail: 'Book Image'
+                },
+                publisher: 'Book Publisher',
+                title: 'Book Title',
+                infoLink: 'www.books.google.com'
+
+            }
+        ];
+
+        it("return an object with children count matching the array length", function() {
+            const bookObjects = Books.createBookObjects(mockBookData);
+            expect(bookObjects.length).toBe(2);
+        })
+    })
+})
+
+describe("createBookObject method", function () {
+
+    it("volumeInfo is undefined, return undefined", function() {
+        let bookObject = Books.createBookObject();
+        expect(bookObject).toBe(undefined);
+    })
+    
+    it("volumeInfo is an empty object, return undefined", function() {
+        const mockVolumeInfo = {};
+
+        let bookObject = Books.createBookObject(mockVolumeInfo);
+        expect(bookObject).toEqual(undefined);
+    })
+    
+    it("volumeInfo is has a defined property, return bookObject with a property with data and the other are null", function() {
+        const mockVolumeInfo = {
+            authors: 'Book Author'
+        };
+        const expectedBookObj = {
+            authors: 'Book Author',
+            description: null,
+            title: null,
+            publishingCompany: null,
+            image: null,
+            moreInfoLink: null
+        };
+
+        let bookObject = Books.createBookObject(mockVolumeInfo);
+        expect(bookObject).toEqual(expectedBookObj);
+    })
+    
+    it("volumeInfo has expected data, return a bookObject with data", function() {
+
+        const mockBookVolumeInfo = {
+            authors: 'Book Author',
+            description: 'Book Description',
+            imageLinks: {
+                thumbnail: 'Book Image'
+            },
+            publisher: 'Book Publisher',
+            title: 'Book Title',
+            infoLink: 'www.books.google.com'
+        };
+    
+        const bookObj = {
+            authors: 'Book Author',
+            description: 'Book Description',
+            image: 'Book Image',
+            publishingCompany: 'Book Publisher',
+            title: 'Book Title',
+            moreInfoLink: 'www.books.google.com'
+        }
+
+        const Book = Books.createBookObject(mockBookVolumeInfo);
+        expect(Book).toEqual(bookObj);
+    });
+})
+
+describe("clearBooks", function() {
+    
+    it("not given a HTMLElement, do not clear its contents", function() {
+        let contentElement = document.createTextNode('div');
+        Books.clearBooks(contentElement);
+        expect(contentElement.textContent === 'div').toBe(true);
+    })
+    
+    it("given a HTMLElement, clear all of its content", function() {
+        let contentElement = document.createElement('div');
+        contentElement.innerText = 'div';
+        Books.clearBooks(contentElement);
+        expect(contentElement.textContent).toBe('');
+    })
+})
+
 describe("displayBooks method", function() {
     let books,
         contentElement;
@@ -9,17 +443,17 @@ describe("displayBooks method", function() {
 
     it("not given anything, return undefined", function () {
         const element = Books.displayBooks();
-        expect(element === undefined).toBe(true);
+        expect(element).toBe(undefined);
     })
 
     it("only given contentElement, return undefined", function () {
         const element = Books.displayBooks(contentElement);
-        expect(element === undefined).toBe(true);
+        expect(element).toBe(undefined);
     })
 
     it("only given books, return undefined", function () {
         const element = Books.displayBooks(undefined, books);
-        expect(element === undefined).toBe(true);
+        expect(element).toBe(undefined);
     })
 
     describe("given expected arguments", function() {
@@ -29,13 +463,17 @@ describe("displayBooks method", function() {
         beforeEach(function() {
             books = [{
                 authors: ['Random', 'Random'], 
+            },{
+                authors: ['Random', 'Random'], 
+            },{
+                authors: ['Random', 'Random'], 
             }];
             contentElement = document.createElement('div');
             Books.displayBooks(contentElement, books);
         })
         
-        it("append 1 child to contentElement", function() {
-            expect(contentElement.children.length).toBe(1);
+        it("child Element contains and element for every object in the array passed in", function() {
+            expect(contentElement.children.length).toBe(books.length);
         })
     })
 })
@@ -789,63 +1227,6 @@ describe("createBookDetailsBackContainerElement method", function() {
             expect(element.children[0].classList.contains('book_details_back_description')).toBe(true);
         })
     })
-})
-
-describe("createBookObject method", function () {
-    let Books;
-
-    beforeEach(function() {
-        Books = window.Books;
-    });
-    
-    it("volumenInfo has expected data, return a bookObject with data", function() {
-
-        const mockBookVolumeInfo = {
-            authors: 'Book Author',
-            description: 'Book Description',
-            imageLinks: {
-                thumbnail: 'Book Image'
-            },
-            publisher: 'Book Publisher',
-            title: 'Book Title',
-            infoLink: 'www.books.google.com'
-        };
-    
-        const bookObj = {
-            authors: 'Book Author',
-            description: 'Book Description',
-            image: 'Book Image',
-            publishingCompany: 'Book Publisher',
-            title: 'Book Title',
-            moreInfoLink: 'www.books.google.com'
-        }
-
-        const Book = Books.createBookObject(mockBookVolumeInfo);
-        expect(Book).toEqual(bookObj);
-    });
-
-    it("volumeInfo has unexpected data, return bookObject with null properties", function() {
-        const mockBookVolumeInfo = {};
-    
-        const bookObj = {
-            authors: null,
-            description: null,
-            image: null,
-            publishingCompany: null,
-            title: null,
-            moreInfoLink: null
-        }
-
-        const Book = Books.createBookObject(mockBookVolumeInfo);
-        expect(Book).toEqual(bookObj);
-    });
-
-    it("volumeInfo is undefined, return undefined", function() {
-        let mockBookVolumeInfo;
-
-        const Book = Books.createBookObject(mockBookVolumeInfo);
-        expect(Book).toBe(undefined);
-    });
 })
 
 describe("collapseSearchForm method", function() {

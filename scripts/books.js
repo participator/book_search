@@ -20,19 +20,32 @@
     }
 
     Books.getUserInput = (inputElement) => {
+        if (!inputElement ||
+            !inputElement instanceof HTMLInputElement) 
+            return;
+
         return inputElement.value;
     }
 
     Books.isSearchFormUserInputValid = (userInput) => {
+        if (!userInput) return;
         const searchFormRegExValidation = /^[\S][\s\w\$\*\.:!@#&,'"]*$/g;
         return Books.isUserInputValid(searchFormRegExValidation, userInput);
     }
 
     Books.isUserInputValid = (regexPatternToMatch, userInput) => {
+        if (!regexPatternToMatch || 
+            !regexPatternToMatch instanceof RegExp ||
+            !userInput) return;
+
         return regexPatternToMatch.test(userInput);
     }
 
     Books.unhideThenHideInvalidUserInputMessageAfterXms = (invalidUserInputMessageElement, hideAferXms) => {
+        if (!invalidUserInputMessageElement ||
+            !invalidUserInputMessageElement instanceof HTMLElement) 
+            return;
+
         Books.unhideInvalidUserInputMessage(invalidUserInputMessageElement);
         setTimeout(function() {
             Books.hideInvalidUserInputMessage(invalidUserInputMessageElement);
@@ -40,10 +53,16 @@
     }
 
     Books.unhideInvalidUserInputMessage = (invalidUserInputMessageElement) => {
+        if (!invalidUserInputMessageElement ||
+            !invalidUserInputMessageElement instanceof HTMLElement) 
+            return;
         invalidUserInputMessageElement.classList.remove('hideVisibility');
     }
 
     Books.hideInvalidUserInputMessage = (invalidUserInputMessageElement) => {
+        if (!invalidUserInputMessageElement ||
+            !invalidUserInputMessageElement instanceof HTMLElement) 
+            return;
         invalidUserInputMessageElement.classList.add('hideVisibility');
     }
 
@@ -59,12 +78,24 @@
     }
 
     Books.getPageStartIndex = (currentPageNumber) => {
-        const startIndex = currentPageNumber <= 0 ? 0 : (currentPageNumber * 10) - 1;
+        const startIndex = isNaN(currentPageNumber) || currentPageNumber <= 0 ? 0 : (currentPageNumber * 10) - 1;
         return startIndex;
     }
 
     Books.createBooksAPIURL = (userQuery, API_KEY, pageStartIndex) => {
-        const booksAPIURL = `https://www.googleapis.com/books/v1/volumes?q=${userQuery.trim().replace(/\s/g, '+')}&printType=books&startIndex=${pageStartIndex}&key=${API_KEY}`;
+        if (!userQuery ||
+            !API_KEY ||
+            pageStartIndex < 0)
+            return;
+
+        const APIHost = "www.googleapis.com";
+        const APIPath = "books/v1/volumes"
+        const APIParameterQ = `q=${userQuery && userQuery.trim().replace(/\s/g, '+')}`;
+        const APIParameterPrintType = "printType=books";
+        const APIParameterStartIndex = `startIndex=${pageStartIndex}`;
+        const APIParameterAPIKey = `key=${API_KEY}`;
+        
+        const booksAPIURL = `https://${APIHost}/${APIPath}?${APIParameterQ}&${APIParameterPrintType}&${APIParameterStartIndex}&${APIParameterAPIKey}`;
         return booksAPIURL;
     }
 
@@ -75,18 +106,25 @@
     }
 
     Books.parseBooks = (jsonData) => {
+        if (!jsonData ||
+            jsonData.isEmpty() ||
+            !jsonData.items ||
+            !Array.isArray(jsonData.items)) return;
+
         const parsedJsonBooks = jsonData.items;
         return parsedJsonBooks;
     }
 
     Books.createBookObjects = (booksData) => {
+        if (!Array.isArray(booksData) || !booksData && !booksData.length) return;
+
         return booksData.map(book => {
             return Books.createBookObject(book.volumeInfo);
         });
     }
     
     Books.createBookObject = (volumeInfo) => {
-        if ( !volumeInfo ) return;
+        if ( !volumeInfo || volumeInfo.isEmpty() ) return;
 
         const bookObject = {
             authors: volumeInfo.authors || null,
@@ -101,12 +139,16 @@
     }
 
     Books.clearBooks = (contentElement) => {
-        if (!contentElement) return;
+        if (!contentElement || 
+            !contentElement instanceof HTMLElement) return;
         contentElement.innerHTML = "";
     }
 
     Books.displayBooks = (contentElement, books) => {
-        if (!contentElement || !books || !books.length) return;
+        if (!contentElement || 
+            !contentElement instanceof HTMLElement || 
+            !books || 
+            !books.length) return;
         
         let fragmentElement = document.createDocumentFragment();
         books.forEach(book => {
@@ -360,9 +402,9 @@
         footerElement.classList.add('footer--collapsed');
     }
 
-    Object.prototype.isEmpty = function() {
+    Object.prototype.isEmpty = function isEmpty() {
         for(var prop in this) {
-            if (this.hasOwnProperty(prop) && prop !== undefined && prop !== null) {
+            if (this.hasOwnProperty(prop)) {
                 return false;
             }
         }
