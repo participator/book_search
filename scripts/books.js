@@ -1,384 +1,76 @@
 (function() {
 
-    const Books = {};
+    if (window.Books) throw new Error('Unable to load Books package');
+
+    // Parent Namespace
+    let Books = {};
     window.Books = Books;
 
-    Books.moveLogoToPageTop = (logoElement) => {
-        logoElement.classList.add('logoMove');
-    }
+    // Dependencies
+    let UI;
 
-    Books.searchBooksOnFormSubmitEvent = (API_KEY, userInput, currentPageNumber) => {
-       return Books.getBooksAPIJsonData(API_KEY, userInput, currentPageNumber)
-       .then(jsonBookData => Books.parseBooks(jsonBookData))
-       .then(parsedBooks => Books.createBookObjects(parsedBooks))
-    }
+    let API_KEY,
+    contentElement,
+    currentPageNumber = 0,
+    userInput;
 
-    Books.searchBooksOnScrollEvent = (API_KEY, userInput, currentPageNumber) => {
-        return Books.getBooksAPIJsonData(API_KEY, userInput, currentPageNumber)
-        .then(jsonBookData => Books.parseBooks(jsonBookData))
-        .then(parsedBooks => Books.createBookObjects(parsedBooks));
-    }
+    window.onload = () => {
+        UI = Books.UI;
+        API_KEY = Books.API.getAPIKey();
+        const searchForm = document.forms.bookSearch;
 
-    Books.getUserInput = (inputElement) => {
-        if (!inputElement ||
-            !inputElement instanceof HTMLElement) 
-            return;
-        return inputElement.value;
-    }
+        searchForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+            
+            // Initalize Page
+            const logoElement = document.querySelector('.logo');
+            UI.moveLogoToPageTop(logoElement);
 
-    Books.isSearchFormUserInputValid = (userInput) => {
-        if (!userInput) return;
-        const searchFormRegExValidation = /^[\S][\s\w\$\*\.:!@#&,'"]*$/g;
-        return Books.isUserInputValid(searchFormRegExValidation, userInput);
-    }
+            const inputElement = document.forms.bookSearch.elements.query;
+            userInput = UI.getUserInput(inputElement);
 
-    Books.isUserInputValid = (regexPatternToMatch, userInput) => {
-        if (!regexPatternToMatch || 
-            !regexPatternToMatch instanceof RegExp ||
-            !userInput) return;
+            // Prepare Page for New Data
+            window.scrollTo(0,0);
+            currentPageNumber = 0;
 
-        return regexPatternToMatch.test(userInput);
-    }
+            if (!UI.isSearchFormUserInputValid(userInput)) {
+                invalidUserInputMessageElement = document.querySelector('.search_form_invalidMessage');
+                UI.unhideThenHideInvalidUserInputMessageAfterXms(invalidUserInputMessageElement, 3000);
+                return;
+            }
 
-    Books.unhideThenHideInvalidUserInputMessageAfterXms = (invalidUserInputMessageElement, hideAferXms) => {
-        Books.unhideInvalidUserInputMessage(invalidUserInputMessageElement);
+            contentElement = document.querySelector('.content');
+            UI.searchBooksOnFormSubmitEvent(API_KEY, userInput, currentPageNumber).then(bookObjects => {
+                UI.clearBooks(contentElement);
+                UI.displayBooks(contentElement, bookObjects);
+            });
+        });
 
-        setTimeout(function() {
-            Books.hideInvalidUserInputMessage(invalidUserInputMessageElement);
-        }, hideAferXms);
-    }
-
-    Books.unhideInvalidUserInputMessage = (invalidUserInputMessageElement) => {
-        invalidUserInputMessageElement.classList.remove('hideVisibility');
-    }
-
-    Books.hideInvalidUserInputMessage = (invalidUserInputMessageElement) => {
-        invalidUserInputMessageElement.classList.add('hideVisibility');
-    }
-
-    Books.getBooksAPIJsonData = (API_KEY, userQuery, currentPageNumber) => {
-        const pageStartIndex = Books.getPageStartIndex(currentPageNumber);
-        const booksUrl = Books.createBooksAPIURL(userQuery, API_KEY, pageStartIndex);
-
-        return Books.getAPIJsonData(booksUrl);
-    }
-
-    Books.getAPIKey = () => {
-        return 'AIzaSyC8YoC2vugrIsUpfieEtNGwdhUDHR8WKQ0';
-    }
-
-    Books.getPageStartIndex = (currentPageNumber) => {
-        const startIndex = isNaN(currentPageNumber) || currentPageNumber <= 0 ? 0 : (currentPageNumber * 10) - 1;
-        return startIndex;
-    }
-
-    Books.createBooksAPIURL = (userQuery, API_KEY, pageStartIndex) => {
-        if (!userQuery ||
-            !API_KEY ||
-            pageStartIndex < 0)
-            return;
-
-        const APIHost = "www.googleapis.com";
-        const APIPath = "books/v1/volumes"
-        const APIParameterQ = `q=${userQuery && userQuery.trim().replace(/\s/g, '+')}`;
-        const APIParameterPrintType = "printType=books";
-        const APIParameterStartIndex = `startIndex=${pageStartIndex}`;
-        const APIParameterAPIKey = `key=${API_KEY}`;
-        
-        const booksAPIURL = `https://${APIHost}/${APIPath}?${APIParameterQ}&${APIParameterPrintType}&${APIParameterStartIndex}&${APIParameterAPIKey}`;
-        return booksAPIURL;
-    }
-
-    Books.getAPIJsonData = (url) => {
-        return fetch(url, {
-            method: 'get',
-        }).then(response => response.json());
-    }
-
-    Books.parseBooks = (jsonData) => {
-        if (!jsonData ||
-            jsonData.isEmpty() ||
-            !jsonData.items ||
-            !Array.isArray(jsonData.items)) return;
-
-        const parsedJsonBooks = jsonData.items;
-        return parsedJsonBooks;
-    }
-
-    Books.createBookObjects = (booksData) => {
-        if (!Array.isArray(booksData) || !booksData && !booksData.length) return;
-
-        return booksData.map(book => {
-            return Books.createBookObject(book.volumeInfo);
+        const searchToggleElement = document.querySelector('.search_toggle');
+        const footerElement = document.querySelector('footer');
+        searchToggleElement.addEventListener('click', () => {
+            UI.changeSearchFormState(footerElement, searchToggleElement);
         });
     }
-    
-    Books.createBookObject = (volumeInfo) => {
-        if ( !volumeInfo || volumeInfo.isEmpty() ) return;
 
-        const bookObject = {
-            authors: volumeInfo.authors || null,
-            description: volumeInfo.description || null,
-            title: volumeInfo.title || null,
-            publishingCompany: volumeInfo.publisher || null,
-            image: volumeInfo.imageLinks && volumeInfo.imageLinks.thumbnail || null,
-            moreInfoLink: volumeInfo.infoLink || null
-        }
+    let isScrollEventActive = false;
+    window.onscroll = () => {
+        if ( (window.innerHeight + window.scrollY) >= document.body.offsetHeight && !isScrollEventActive) {
+            
+            isScrollEventActive = true;
+            currentPageNumber++;
 
-        return bookObject;
-    }
-
-    Books.clearBooks = (contentElement) => {
-        contentElement.innerHTML = "";
-    }
-
-    Books.displayBooks = (contentElement, books) => {
-        let fragmentElement = document.createDocumentFragment();
-        books.forEach(book => {
-            fragmentElement.appendChild(Books.createBookElement(book));
-        })
-
-        contentElement.appendChild(fragmentElement);
-    }
-
-    Books.createBookElement = (book) => {
-        if (!book || book.isEmpty()) return;
-
-        const bookElements = {
-            authorElement: Books.createBookAuthorElementAndAppendContent('p', book.authors),
-            descriptionElement: Books.createBookTextElementAndAppendContent('p', book.description),
-            imageElement: Books.createBookImageElement(book.image, book.title, "Image"),
-            moreInfoLinkElement: Books.createBookLinkElement(book.moreInfoLink, 'More Information', 'No more information'),
-            publishingCompanyElement: Books.createBookTextElementAndAppendContent('p', book.publishingCompany),
-            titleElement: Books.createBookTextElementAndAppendContent('h2', book.title),
-        }
-        
-        if (!bookElements || bookElements.isEmpty()) return;
-        
-        const bookElement = Books.createBookContainerElement(bookElements);
-
-        return bookElement;
-    }
-
-    Books.createBookAuthorElementAndAppendContent = (type, content) => {
-        if (!content || !Array.isArray(content)) return;
-        return Books.createBookTextElementAndAppendContent(type, content.join(', '));
-    }
-
-    Books.createBookTextElementAndAppendContent = (type, content) => {
-        if (!type || !content) return;
-
-        const element = document.createElement(type);
-        element.append(content);
-
-        return element;
-    }
-
-    Books.createBookImageElement = (url, description, textAppendedAtEndOfDescription, pageUrl) =>{
-        if (!url || !description) return;
-
-        const imageElement = document.createElement('img');
-        imageElement.alt = description + " " + textAppendedAtEndOfDescription;
-        imageElement.classList.add('book_image');
-        
-        let urlValidated;
-
-        try {
-            urlValidated = Books.validateUrl(url);
-        } catch (error) {
-            return;
-        }
-
-        let httpsUrl = Books.replaceHttpWithHttpsBasedWhenPageUrlIsHttp(urlValidated, pageUrl);
-
-        const encodedUrl = Books.encodeUrl(httpsUrl || urlValidated) || "";
-        
-        imageElement.src = encodedUrl;
-        return imageElement;
-    }
-
-    Books.createBookLinkElement = (url, successfulInnerText, failureInnerText, pageUrl) => {
-        if (!url) return;
-
-        const linkElement = document.createElement('a');
-        
-        let urlValidated;
-        try {
-            urlValidated = Books.validateUrl(url);
-            linkElement.innerText = successfulInnerText;
-        }
-        catch {
-            linkElement.innerText = failureInnerText;
-        }
-
-        let httpsUrl = Books.replaceHttpWithHttpsBasedWhenPageUrlIsHttp(urlValidated, pageUrl);
-
-        const encodedUrl = Books.encodeUrl(httpsUrl || urlValidated) || "";
-        if (encodedUrl) {
-            linkElement.href = encodedUrl;
-        }
-        linkElement.target = "_blank";
-        linkElement.rel = "noopener";
-
-        return linkElement;
-    }
-
-    Books.replaceHttpWithHttpsBasedWhenPageUrlIsHttp = (url, pageUrl) => {
-        if (!url) return;
-
-        let httpsUrl;
-        if (pageUrl && pageUrl.startsWith('https:')) {
-            httpsUrl = Books.replaceHttpWithHttps(url);
-        }
-        else if (window.location.href.startsWith('https:')) {
-            httpsUrl = Books.replaceHttpWithHttps(url);
-        }
-        return httpsUrl;
-    }
-
-    Books.replaceHttpWithHttps = url => url.replace('http:', 'https:');
-
-    Books.validateUrl = url => new URL(url).href;
-
-    Books.encodeUrl = url => url && encodeURI(url);
-
-    Books.createBookContainerElement = (bookElements = {authorElement, descriptionElement, imageElement, moreInfoLinkElement, publishingCompanyElement, titleElement} = {}) => {
-        if (!bookElements || bookElements.isEmpty()) return;
-
-        const bookContainerElement = document.createElement('div');
-        bookContainerElement.classList.add('book');
-        
-        const {imageElement} = {...bookElements}
-        if (imageElement && imageElement instanceof HTMLElement) {
-            bookContainerElement.appendChild(imageElement);
-        }
-
-        const {authorElement, descriptionElement, moreInfoLinkElement, publishingCompanyElement, titleElement} = {...bookElements};
-        const detailsElements = {authorElement, descriptionElement, moreInfoLinkElement, publishingCompanyElement, titleElement};
-        
-        if (!detailsElements.isEmpty()) {
-            const bookDetailsElement = Books.createBookDetailsElement(detailsElements);
-            bookContainerElement.appendChild(bookDetailsElement);
-        }
-
-        return bookContainerElement;
-    }
-
-    Books.createBookDetailsElement = (detailsElements = {authorElement, descriptionElement, moreInfoLinkElement, publishingCompanyElement, titleElement} = {}) => {
-        if (!detailsElements || detailsElements.isEmpty()) return;
-
-        const bookDetailsElement = document.createElement('div');
-        bookDetailsElement.classList.add('book_details');
-       
-        var  {authorElement, publishingCompanyElement, titleElement} = {...detailsElements};
-        const bookDetailsFrontElements = {authorElement, publishingCompanyElement, titleElement};
-        const detailsElementFront = Books.createBookDetailsFrontContainerElement(bookDetailsFrontElements);
-        
-        if (detailsElementFront) {
-            bookDetailsElement.appendChild(detailsElementFront);
-        }
-        
-        const {descriptionElement, moreInfoLinkElement} = {...detailsElements};
-        const bookDetailsBackElements = {descriptionElement, moreInfoLinkElement};
-        const detailsElementBack = Books.createBookDetailsBackContainerElement(bookDetailsBackElements);
-        
-        if (detailsElementBack) {
-            bookDetailsElement.appendChild(detailsElementBack);
-        }
-
-        return bookDetailsElement;
-    }
-
-    Books.createBookDetailsFrontContainerElement = (frontElements = {authorElement, publishingCompanyElement, titleElement} = {}) => {
-        if (!frontElements || frontElements.isEmpty()) return;
-
-        const detailsFrontContainerElement = document.createElement('div');
-        detailsFrontContainerElement.classList.add('book_details_front');
-
-        const {titleElement} = {...frontElements};
-        if (titleElement && titleElement instanceof HTMLElement) {
-            detailsFrontContainerElement.appendChild(titleElement);
-        }
-
-        const {authorElement} = {...frontElements};
-        if (authorElement && authorElement instanceof HTMLElement) {
-            detailsFrontContainerElement.appendChild(authorElement);
-        }
-        
-        const {publishingCompanyElement} = {...frontElements};
-        if (publishingCompanyElement && publishingCompanyElement instanceof HTMLElement) {
-            detailsFrontContainerElement.appendChild(publishingCompanyElement);
-        }
-
-        return detailsFrontContainerElement;
-    }
-
-    Books.createBookDetailsBackContainerElement = (backElements = {descriptionElement, moreInfoLinkElement} = {}) => {
-        if (!backElements || backElements.isEmpty()) return;
-
-        const detailsBackContainerElement = document.createElement('div');
-        detailsBackContainerElement.classList.add('book_details_back');
-
-        const {descriptionElement} = {...backElements};
-        if (descriptionElement && descriptionElement instanceof HTMLElement) {
-            descriptionElement.classList.add('book_details_back_description');
-            detailsBackContainerElement.appendChild(descriptionElement);
-        }
-
-        const {moreInfoLinkElement} = {...backElements};
-        if (moreInfoLinkElement && moreInfoLinkElement instanceof HTMLElement) {
-            detailsBackContainerElement.appendChild(moreInfoLinkElement);
-        }
-
-        return detailsBackContainerElement;
-    }
-
-    Books.changeSearchFormState = (footerElement, searchToggleElement) => {
-        if (searchToggleElement.dataset.collapsed === "true") {
-            Books.expandSearchForm(footerElement, searchToggleElement);
-        }
-        else {
-            Books.collapseSearchForm(footerElement, searchToggleElement);
-        }
-    }
-
-    Books.expandSearchForm = (footerElement, searchToggleElement) => {
-        Books.showExpandStateForFooterElement(footerElement);
-        Books.showExpandStateForSearchToggleElement(searchToggleElement);
-    }
-
-    Books.collapseSearchForm = (footerElement, searchToggleElement) => {
-        Books.showCollapseStateForFooterElement(footerElement);
-        Books.showCollapseStateForSearchToggleElement(searchToggleElement);
-    }
-
-    Books.showExpandStateForSearchToggleElement = (searchToggleElement) => {
-        searchToggleElement.dataset.collapsed = false;
-        searchToggleElement.classList.remove('search_toggle--collapsed');
-        searchToggleElement.innerText = 'Collapse Search';
-    }
-    
-    Books.showExpandStateForFooterElement = (footerElement) => {
-        footerElement.classList.remove('footer--collapsed');
-    }
-    
-    Books.showCollapseStateForSearchToggleElement = (searchToggleElement) => {
-        searchToggleElement.dataset.collapsed = true;
-        searchToggleElement.classList.add('search_toggle--collapsed');
-        searchToggleElement.innerText = 'Expand Search';
-    }
-    
-    Books.showCollapseStateForFooterElement = (footerElement) => {
-        footerElement.classList.add('footer--collapsed');
-    }
-
-    Object.prototype.isEmpty = function isEmpty() {
-        for(var prop in this) {
-            if (this.hasOwnProperty(prop)) {
-                return false;
+            if (!UI.isSearchFormUserInputValid(userInput)) {
+                invalidUserInputMessageElement = document.querySelector('.search_form_invalidMessage');
+                UI.unhideThenHideInvalidUserInputMessageAfterXms(invalidUserInputMessageElement, 3000);
+                return;
             }
+            
+            UI.searchBooksOnScrollEvent(API_KEY, userInput, currentPageNumber).then(books => {
+                UI.displayBooks(contentElement, books);
+                isScrollEventActive = false;
+            });
         }
-        return true;
     }
-
+    
 })()

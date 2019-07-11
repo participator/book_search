@@ -1,20 +1,22 @@
+let UI = window.Books.UI;
+
 describe("moveLogoToPageTop method", function() {
     it("given an HTMLElement, add class 'logoMove'", function() {
         const element = document.createElement('div');
-        Books.moveLogoToPageTop(element);
+        UI.moveLogoToPageTop(element);
         expect(element.classList.contains('logoMove')).toBe(true);
     })
 })
 
 describe("getUserInput method", function() {
     it("not given anything, return undefined", function() {
-        const userInput = Books.getUserInput();
+        const userInput = UI.getUserInput();
         expect(userInput).toBe(undefined);
     })
 
     it("not given a HTMLInputElement, return undefined", function() {
         const inputElement = '';
-        const userInput = Books.getUserInput(inputElement);
+        const userInput = UI.getUserInput(inputElement);
         expect(userInput).toBe(undefined);
     })
 
@@ -22,7 +24,7 @@ describe("getUserInput method", function() {
         const text = 'inside no more';
         const inputElement = document.createElement('input');
         inputElement.value = text;
-        const userInput = Books.getUserInput(inputElement);
+        const userInput = UI.getUserInput(inputElement);
 
         expect(userInput).toBe(text);
     })
@@ -31,60 +33,20 @@ describe("getUserInput method", function() {
 
 describe("isSearchFormUserInputValid method", function() {
     it('not given anything return undefined', function() {
-        const isValid = Books.isSearchFormUserInputValid();
+        const isValid = UI.isSearchFormUserInputValid();
         expect(isValid).toBe(undefined);
     })
 
     it('not given valid input, return false', function() {
         const input = ' 12321312';
-        const isValid = Books.isSearchFormUserInputValid(input);
+        const isValid = UI.isSearchFormUserInputValid(input);
         expect(isValid).toBe(false);
     })
 
     it('given valid input, return true', function() {
         const input = 'a12321312';
-        const isValid = Books.isSearchFormUserInputValid(input);
+        const isValid = UI.isSearchFormUserInputValid(input);
         expect(isValid).toBe(true);
-    })
-})
-
-describe("isUserInputValid method", function() {
-
-    it("not given anything, return undefined", function () {
-        const isUserInputValid = Books.isUserInputValid();
-        expect(isUserInputValid).toBe(undefined);
-    })
-
-    it("not given a RegEx type, return undefined", function () {
-        let regexPatternToMatch = '',
-            userInput = '';
-
-        const isUserInputValid = Books.isUserInputValid(regexPatternToMatch, userInput);
-        expect(isUserInputValid).toBe(undefined);
-    })
-
-    it("not given userInput, return undefined", function () {
-        let regexPatternToMatch,
-            userInput;
-
-        const isUserInputValid = Books.isUserInputValid(regexPatternToMatch);
-        expect(isUserInputValid).toBe(undefined);
-    })
-
-    it("given regex with matching data, return true", function() {
-        let regexPatternToMatch = /abc/g,
-            userInput = 'My favorite three letters are: abc. However, I have three more too.';
-
-            const isUserInputValid = Books.isUserInputValid(regexPatternToMatch, userInput);
-            expect(isUserInputValid).toBe(true);
-    })
-
-    it("given regex with nonmatching data, return false", function() {
-        let regexPatternToMatch = /abc/g,
-            userInput = 'My favorite three letters are: def. However, I have three more too.';
-
-            const isUserInputValid = Books.isUserInputValid(regexPatternToMatch, userInput);
-            expect(isUserInputValid).toBe(false);
     })
 })
 
@@ -92,7 +54,7 @@ describe("unhideThenHideInvalidUserInputMessageAfterXms", function() {
 
     it("not given a ms, add then remove class hideVisibility", function() {
         const element = document.createElement('div');
-        Books.unhideThenHideInvalidUserInputMessageAfterXms(element);
+        UI.unhideThenHideInvalidUserInputMessageAfterXms(element);
         expect(element.classList.contains('hideVisibility')).toBe(false);
     })
 
@@ -115,7 +77,7 @@ describe("unhideThenHideInvalidUserInputMessageAfterXms", function() {
             let element = document.createElement('div');
             let ms = 100000;
             
-            Books.unhideThenHideInvalidUserInputMessageAfterXms(element, ms);
+            UI.unhideThenHideInvalidUserInputMessageAfterXms(element, ms);
             expect(element.classList.contains('hideVisibility')).toBe(true);
 
             const callback = jasmine.createSpy('callback');
@@ -129,7 +91,7 @@ describe("unhideThenHideInvalidUserInputMessageAfterXms", function() {
 describe("unhideInvalidUserInputMessage", function() {
     it("given an HTMLElement, add class hideVisibility", function() {
         let element = document.createElement('div');
-        Books.unhideInvalidUserInputMessage(element);
+        UI.unhideInvalidUserInputMessage(element);
         expect(element.classList.contains('hideVisibility')).toBe(false);
     })
 })
@@ -137,277 +99,23 @@ describe("unhideInvalidUserInputMessage", function() {
 describe("hideInvalidUserInputMessage method", function() {
     it("given an HTMLElement, add class hideVisibility", function() {
         let element = document.createElement('div');
-        Books.hideInvalidUserInputMessage(element);
+        UI.hideInvalidUserInputMessage(element);
         expect(element.classList.contains('hideVisibility')).toBe(true);
     })
-})
-
-describe("getPageStartIndex method", function() {
-    it("not given anything", function() {
-        const startIndex = Books.getPageStartIndex();
-        expect(startIndex).toBe(0);
-    })
-    
-    it("not given a number", function() {
-        const startIndex = Books.getPageStartIndex('');
-        expect(startIndex).toBe(0);
-    })
-    
-    it("given a negative number", function() {
-        const startIndex = Books.getPageStartIndex(-2019);
-        expect(startIndex).toBe(0);
-    })
-
-    it("given a positive number", function() {
-        const startIndex = Books.getPageStartIndex(10);
-        const expected = (10 * 10) - 1;
-        expect(startIndex).toBe(expected);
-    })
-    
-})
-
-describe("createBooksAPIURL method", function() {
-    it("not given anything, return undefined", function() {
-        const booksAPIURL = Books.createBooksAPIURL();
-        expect(booksAPIURL).toBe(undefined);
-    })
-
-    describe("not given expected data", function() {
-        let parameters;
-
-        it("userQuery is undefined, return undefined", function() {
-            parameters = [undefined, 'akdjalj', 0];
-            const booksAPIURL = Books.createBooksAPIURL(...parameters);
-            expect(booksAPIURL).toBe(undefined);
-        })
-
-        it("API_KEY is undefined, return undefined", function() {
-            parameters = ['book search', undefined, 0];
-            const booksAPIURL = Books.createBooksAPIURL(...parameters);
-            expect(booksAPIURL).toBe(undefined);
-        })
-
-        it("pageStartIndex is less than 0, return undefined", function() {
-            parameters = ['book search', undefined, 0];
-            const booksAPIURL = Books.createBooksAPIURL(...parameters);
-            expect(booksAPIURL).toBe(undefined);
-        })
-        
-    })
-
-    describe("given expected data", function() {
-        let parameters,
-        booksAPIURL;
-
-        beforeEach(function() {
-            parameters = ['book search', 'akdjalj', 0];
-            booksAPIURL = Books.createBooksAPIURL(...parameters);
-        })
-
-        it("replace query parameter's spaces with '+'", function() {
-            expected = "q=book+search&";
-            expect(booksAPIURL.includes(expected)).toBe(true);
-        })
-
-        it("return correct url", function() {
-            expected = 'https://www.googleapis.com/books/v1/volumes?q=book+search&printType=books&startIndex=0&key=akdjalj';
-            expect(booksAPIURL).toBe(expected);
-        })
-    })
-})
-
-describe("parseBooks method", function() {
-    it("not given anything, return undefined", function() {
-        const parseBooks = Books.parseBooks();
-        expect(parseBooks).toBe(undefined);
-    })
-
-    it("given an object without items property defined, return undefined", function() {
-        const mockJsonData = { title: "" };
-        const parseBooks = Books.parseBooks(mockJsonData);
-        
-        expect(parseBooks).toBe(undefined);
-    })
-
-    it("given an object without items property as an Array, return undefined", function() {
-        const mockJsonData = { items: "" };
-        const parseBooks = Books.parseBooks(mockJsonData);
-        
-        expect(parseBooks).toBe(undefined);
-    })
-
-    it("given object with items property as an Array, returns items property", function() {
-        const mockJsonData = {
-            items: [
-                {
-                    volumeInfo: {
-                        authors: 'Book Author',
-                        description: 'Book Description',
-                        imageLinks: {
-                            thumbnail: 'Book Image'
-                        },
-                        publisher: 'Book Publisher',
-                        title: 'Book Title',
-                        infoLink: 'www.books.google.com'
-                    },
-                    volumeInfo: {
-                        authors: 'Book Author',
-                        description: 'Book Description',
-                        imageLinks: {
-                            thumbnail: 'Book Image'
-                        },
-                        publisher: 'Book Publisher',
-                        title: 'Book Title',
-                        infoLink: 'www.books.google.com'
-                    }
-                }
-            ]
-        };
-
-        const books =  [
-            {
-                volumeInfo: {
-                    authors: 'Book Author',
-                    description: 'Book Description',
-                    imageLinks: {
-                        thumbnail: 'Book Image'
-                    },
-                    publisher: 'Book Publisher',
-                    title: 'Book Title',
-                    infoLink: 'www.books.google.com'
-                },
-                volumeInfo: {
-                    authors: 'Book Author',
-                    description: 'Book Description',
-                    imageLinks: {
-                        thumbnail: 'Book Image'
-                    },
-                    publisher: 'Book Publisher',
-                    title: 'Book Title',
-                    infoLink: 'www.books.google.com'
-                }
-            }
-        ]
-
-        const parsedBooks = Books.parseBooks(mockJsonData);
-        expect(parsedBooks).toEqual(books);
-    })
-})
-
-describe("createBookObjects method", function() {
-    it("not given anything, return undefined", function() {
-        const bookObjects = Books.createBookObjects();
-        expect(bookObjects).toBe(undefined);
-    })
-    it("not given an Array, return undefined", function() {
-        const bookObjects = Books.createBookObjects('');
-        expect(bookObjects).toBe(undefined);
-    })
-    it("given an empty Array, return an empty Array", function() {
-        const bookObjects = Books.createBookObjects([]);
-        expect(bookObjects.length).toEqual(0);
-    })
-    
-    describe("given array of expected data", function() {
-        let mockBookData = [
-            {
-                authors: 'Book Author',
-                description: null,
-                title: null,
-                publishingCompany: null,
-                image: null,
-                moreInfoLink: null
-            },
-            {
-                authors: 'Book Author',
-                description: 'Book Description',
-                imageLinks: {
-                    thumbnail: 'Book Image'
-                },
-                publisher: 'Book Publisher',
-                title: 'Book Title',
-                infoLink: 'www.books.google.com'
-
-            }
-        ];
-
-        it("return an object with children count matching the array length", function() {
-            const bookObjects = Books.createBookObjects(mockBookData);
-            expect(bookObjects.length).toBe(2);
-        })
-    })
-})
-
-describe("createBookObject method", function () {
-
-    it("volumeInfo is undefined, return undefined", function() {
-        let bookObject = Books.createBookObject();
-        expect(bookObject).toBe(undefined);
-    })
-    
-    it("volumeInfo is an empty object, return undefined", function() {
-        const mockVolumeInfo = {};
-
-        let bookObject = Books.createBookObject(mockVolumeInfo);
-        expect(bookObject).toEqual(undefined);
-    })
-    
-    it("volumeInfo is has a defined property, return bookObject with a property with data and the other are null", function() {
-        const mockVolumeInfo = {
-            authors: 'Book Author'
-        };
-        const expectedBookObj = {
-            authors: 'Book Author',
-            description: null,
-            title: null,
-            publishingCompany: null,
-            image: null,
-            moreInfoLink: null
-        };
-
-        let bookObject = Books.createBookObject(mockVolumeInfo);
-        expect(bookObject).toEqual(expectedBookObj);
-    })
-    
-    it("volumeInfo has expected data, return a bookObject with data", function() {
-
-        const mockBookVolumeInfo = {
-            authors: 'Book Author',
-            description: 'Book Description',
-            imageLinks: {
-                thumbnail: 'Book Image'
-            },
-            publisher: 'Book Publisher',
-            title: 'Book Title',
-            infoLink: 'www.books.google.com'
-        };
-    
-        const bookObj = {
-            authors: 'Book Author',
-            description: 'Book Description',
-            image: 'Book Image',
-            publishingCompany: 'Book Publisher',
-            title: 'Book Title',
-            moreInfoLink: 'www.books.google.com'
-        }
-
-        const Book = Books.createBookObject(mockBookVolumeInfo);
-        expect(Book).toEqual(bookObj);
-    });
 })
 
 describe("clearBooks", function() {
     
     it("not given a HTMLElement, do not clear its contents", function() {
         let contentElement = document.createTextNode('div');
-        Books.clearBooks(contentElement);
+        UI.clearBooks(contentElement);
         expect(contentElement.textContent === 'div').toBe(true);
     })
     
     it("given a HTMLElement, clear all of its content", function() {
         let contentElement = document.createElement('div');
         contentElement.innerText = 'div';
-        Books.clearBooks(contentElement);
+        UI.clearBooks(contentElement);
         expect(contentElement.textContent).toBe('');
     })
 })
@@ -434,7 +142,7 @@ describe("displayBooks method", function() {
                 authors: ['Random', 'Random'], 
             }];
             contentElement = document.createElement('div');
-            Books.displayBooks(contentElement, books);
+            UI.displayBooks(contentElement, books);
         })
         
         it("child Element contains and element for every object in the array passed in", function() {
@@ -446,7 +154,7 @@ describe("displayBooks method", function() {
 describe("createBookElement method", function() {
     describe("not given anything", function() {
         it("return undefined", function() {
-            const element = Books.createBookElement();
+            const element = UI.createBookElement();
             expect(element === undefined).toBe(true);
         })
     })
@@ -457,7 +165,7 @@ describe("createBookElement method", function() {
 
         beforeEach(function() {
             book = {};
-            element = Books.createBookElement(book);
+            element = UI.createBookElement(book);
         })
 
         it("return undefined", function() {
@@ -473,7 +181,7 @@ describe("createBookElement method", function() {
             book = {
                 authors: ['Random, Random']
             };
-            element = Books.createBookElement(book);
+            element = UI.createBookElement(book);
         })
 
         it("return HTMLDivElement", function() {
@@ -493,7 +201,7 @@ describe("createBookElement method", function() {
             book = {
                 description: ['Random, Random']
             };
-            element = Books.createBookElement(book);
+            element = UI.createBookElement(book);
         })
 
         it("return HTMLDivElement", function() {
@@ -513,7 +221,7 @@ describe("createBookElement method", function() {
             book = {
                 image: 'https://fakeimg.pl/128x125/?text=Hello'
             };
-            element = Books.createBookElement(book);
+            element = UI.createBookElement(book);
         })
 
         it("return HTMLDivElement", function() {
@@ -533,7 +241,7 @@ describe("createBookElement method", function() {
             book = {
                 moreInfoLink: ['Random, Random']
             };
-            element = Books.createBookElement(book);
+            element = UI.createBookElement(book);
         })
 
         it("return HTMLDivElement", function() {
@@ -553,7 +261,7 @@ describe("createBookElement method", function() {
             book = {
                 publishingCompany: 'Random'
             };
-            element = Books.createBookElement(book);
+            element = UI.createBookElement(book);
         })
 
         it("return HTMLDivElement", function() {
@@ -573,7 +281,7 @@ describe("createBookElement method", function() {
             book = {
                 title: 'Random'
             };
-            element = Books.createBookElement(book);
+            element = UI.createBookElement(book);
         })
 
         it("return HTMLDivElement", function() {
@@ -598,17 +306,17 @@ describe("createBookTextElementAndAppendContent", function() {
     })
     describe("not given", function() {
         it("anything, return undefined", function() {
-            const element = Books.createBookTextElementAndAppendContent();
+            const element = UI.createBookTextElementAndAppendContent();
             expect(element).toBe(undefined);
         })
 
         it("a type, return undefined", function() {
-            const element = Books.createBookTextElementAndAppendContent(undefined, content);
+            const element = UI.createBookTextElementAndAppendContent(undefined, content);
             expect(element).toBe(undefined);
         })
 
         it("a content, return undefined", function() {
-            const element = Books.createBookTextElementAndAppendContent(type, undefined);
+            const element = UI.createBookTextElementAndAppendContent(type, undefined);
             expect(element).toBe(undefined);
         })
     })
@@ -617,7 +325,7 @@ describe("createBookTextElementAndAppendContent", function() {
         let element;
 
         beforeEach(function() {
-            element = Books.createBookTextElementAndAppendContent(type, content);
+            element = UI.createBookTextElementAndAppendContent(type, content);
         })
 
         it("return HTMLElement", function() {
@@ -634,22 +342,22 @@ describe("createBookImageElement method", function() {
     describe("not given", function() {
 
         it("anything, return undefined", function() {
-            const actual = Books.createBookImageElement();
+            const actual = UI.createBookImageElement();
             expect(actual).toBe(undefined);
         })
 
         it("a url, return undefined", function() {
-            const actual = Books.createBookImageElement(undefined, "Random text");
+            const actual = UI.createBookImageElement(undefined, "Random text");
             expect(actual).toBe(undefined);
         })
 
         it("a description, return undefined", function() {
-            const actual = Books.createBookImageElement("https://www.randompicture.rp", undefined);
+            const actual = UI.createBookImageElement("https://www.randompicture.rp", undefined);
             expect(actual).toBe(undefined);
         })
 
         it("a proper url, return undefined", function() {
-            const actual = Books.createBookImageElement("www.randompicture.rp", "Random text");
+            const actual = UI.createBookImageElement("www.randompicture.rp", "Random text");
             expect(actual).toBe(undefined);
         })
     })
@@ -664,9 +372,9 @@ describe("createBookImageElement method", function() {
         beforeEach(function(){
             description = "A giraffe";
             fakePageUrl = 'https://random.fake/';
-            src = "https://www.randompicture.rp/";
+            src = "https://www.randompicture.fake/";
             textAppendedAtEndOfDescription = "appended text";
-            element = Books.createBookImageElement(src, description, textAppendedAtEndOfDescription, fakePageUrl);
+            element = UI.createBookImageElement(src, description, textAppendedAtEndOfDescription, fakePageUrl);
         })
 
         it("return HTMLImageElement", function() {
@@ -674,7 +382,7 @@ describe("createBookImageElement method", function() {
         })
 
         it("return element with encoded src", function() {
-            element = Books.createBookImageElement(src, description, textAppendedAtEndOfDescription);
+            element = UI.createBookImageElement(src, description, textAppendedAtEndOfDescription);
             expect(element.src === encodeURI(src)).toBe(true);
         })
         
@@ -696,12 +404,12 @@ describe("createBookImageElement method", function() {
         beforeEach(function() {
             description = "A giraffe";
             fakePageUrl = "https://random.fake/";
-            src = "https://www.randompicture.rp/";
+            src = "https://www.randompicture.fake/";
             textAppendedAtEndOfDescription = "appended text";
         })
 
         it("return element with href as https", function() {
-            const element = Books.createBookImageElement(src, description, textAppendedAtEndOfDescription, fakePageUrl);
+            const element = UI.createBookImageElement(src, description, textAppendedAtEndOfDescription, fakePageUrl);
             expect(element.src === src).toBe(true);
         })
     })
@@ -710,7 +418,7 @@ describe("createBookImageElement method", function() {
 describe("createBookLinkElement method", function() {
     describe("not given anything", function() {
         it("return undefined", function() {
-            const element = Books.createBookLinkElement();
+            const element = UI.createBookLinkElement();
             expect(element).toBe(undefined);
         })
     })
@@ -724,7 +432,7 @@ describe("createBookLinkElement method", function() {
         })
 
         it("return undefined", function() {
-            const element = Books.createBookLinkElement(...mockObject);
+            const element = UI.createBookLinkElement(...mockObject);
             expect(element).toBe(undefined);
         })
     })
@@ -740,12 +448,12 @@ describe("createBookLinkElement method", function() {
         })
 
         it("return element with successfulInnerText", function() {
-            const element = Books.createBookLinkElement(...mockObject);
+            const element = UI.createBookLinkElement(...mockObject);
             expect(element.innerText === successfulInnerText).toBe(true);
         })
         
         it("return element with given encoded href", function() {
-            const element = Books.createBookLinkElement(...mockObject);
+            const element = UI.createBookLinkElement(...mockObject);
             expect(element.href === encodeURI(url)).toBe(true);
         })
     })
@@ -761,12 +469,12 @@ describe("createBookLinkElement method", function() {
         })
 
         it("return element with failureInnerText", function() {
-            const element = Books.createBookLinkElement(...mockObject);
+            const element = UI.createBookLinkElement(...mockObject);
             expect(element.innerText === failureInnerText).toBe(true);
         })
         
         it("return element with empty href", function() {
-            const element = Books.createBookLinkElement(...mockObject);
+            const element = UI.createBookLinkElement(...mockObject);
             expect(element.href === '').toBe(true);
         })
     })
@@ -775,7 +483,7 @@ describe("createBookLinkElement method", function() {
 describe("createBookContainerElement method", function() {
     describe("not given anything", function() {
         it("return undefined", function() {
-            const element = Books.createBookContainerElement();
+            const element = UI.createBookContainerElement();
             expect(element === undefined).toBe(true);
         })
     })
@@ -790,17 +498,17 @@ describe("createBookContainerElement method", function() {
         })
 
         it("return an HTMLDIVElement", function() {
-            const element = Books.createBookContainerElement(elementsObj);
+            const element = UI.createBookContainerElement(elementsObj);
             expect(element instanceof HTMLDivElement).toBe(true);
         })
 
         it("return an element that has class 'book'", function() {
-            const element = Books.createBookContainerElement(elementsObj);
+            const element = UI.createBookContainerElement(elementsObj);
             expect(element.classList.contains('book')).toBe(true);
         })
         
         it("return an element that has one child", function() {
-            const element = Books.createBookContainerElement(elementsObj);
+            const element = UI.createBookContainerElement(elementsObj);
             expect(element.children.length).toBe(1);
         })
     })
@@ -815,17 +523,17 @@ describe("createBookContainerElement method", function() {
         })
 
         it("return an HTMLDIVElement", function() {
-            const element = Books.createBookContainerElement(elementsObj);
+            const element = UI.createBookContainerElement(elementsObj);
             expect(element instanceof HTMLDivElement).toBe(true);
         })
 
         it("return an element that has class 'book'", function() {
-            const element = Books.createBookContainerElement(elementsObj);
+            const element = UI.createBookContainerElement(elementsObj);
             expect(element.classList.contains('book')).toBe(true);
         })
         
         it("return an element that has one child", function() {
-            const element = Books.createBookContainerElement(elementsObj);
+            const element = UI.createBookContainerElement(elementsObj);
             expect(element.children.length).toBe(1);
         })
     })
@@ -840,17 +548,17 @@ describe("createBookContainerElement method", function() {
         })
 
         it("return an HTMLDIVElement", function() {
-            const element = Books.createBookContainerElement(elementsObj);
+            const element = UI.createBookContainerElement(elementsObj);
             expect(element instanceof HTMLDivElement).toBe(true);
         })
 
         it("return an element that has class 'book'", function() {
-            const element = Books.createBookContainerElement(elementsObj);
+            const element = UI.createBookContainerElement(elementsObj);
             expect(element.classList.contains('book')).toBe(true);
         })
         
         it("return an element that has one child", function() {
-            const element = Books.createBookContainerElement(elementsObj);
+            const element = UI.createBookContainerElement(elementsObj);
             expect(element.children.length).toBe(2);
         })
     })
@@ -865,17 +573,17 @@ describe("createBookContainerElement method", function() {
         })
 
         it("return an HTMLDIVElement", function() {
-            const element = Books.createBookContainerElement(elementsObj);
+            const element = UI.createBookContainerElement(elementsObj);
             expect(element instanceof HTMLDivElement).toBe(true);
         })
 
         it("return an element that has class 'book'", function() {
-            const element = Books.createBookContainerElement(elementsObj);
+            const element = UI.createBookContainerElement(elementsObj);
             expect(element.classList.contains('book')).toBe(true);
         })
         
         it("return an element that has one child", function() {
-            const element = Books.createBookContainerElement(elementsObj);
+            const element = UI.createBookContainerElement(elementsObj);
             expect(element.children.length).toBe(1);
         })
     })
@@ -890,17 +598,17 @@ describe("createBookContainerElement method", function() {
         })
 
         it("return an HTMLDIVElement", function() {
-            const element = Books.createBookContainerElement(elementsObj);
+            const element = UI.createBookContainerElement(elementsObj);
             expect(element instanceof HTMLDivElement).toBe(true);
         })
 
         it("return an element that has class 'book'", function() {
-            const element = Books.createBookContainerElement(elementsObj);
+            const element = UI.createBookContainerElement(elementsObj);
             expect(element.classList.contains('book')).toBe(true);
         })
         
         it("return an element that has one child", function() {
-            const element = Books.createBookContainerElement(elementsObj);
+            const element = UI.createBookContainerElement(elementsObj);
             expect(element.children.length).toBe(1);
         })
     })
@@ -915,17 +623,17 @@ describe("createBookContainerElement method", function() {
         })
 
         it("return an HTMLDIVElement", function() {
-            const element = Books.createBookContainerElement(elementsObj);
+            const element = UI.createBookContainerElement(elementsObj);
             expect(element instanceof HTMLDivElement).toBe(true);
         })
 
         it("return an element that has class 'book'", function() {
-            const element = Books.createBookContainerElement(elementsObj);
+            const element = UI.createBookContainerElement(elementsObj);
             expect(element.classList.contains('book')).toBe(true);
         })
         
         it("return an element that has one child", function() {
-            const element = Books.createBookContainerElement(elementsObj);
+            const element = UI.createBookContainerElement(elementsObj);
             expect(element.children.length).toBe(1);
         })
     })
@@ -934,7 +642,7 @@ describe("createBookContainerElement method", function() {
 describe("createBookDetailsFrontContainerElement method", function() {
     describe("not given anything", function() {
         it("return 'undefined'", function() {
-            const element = Books.createBookDetailsFrontContainerElement();
+            const element = UI.createBookDetailsFrontContainerElement();
             expect(element === undefined).toBe(true);
         })
     })
@@ -951,17 +659,17 @@ describe("createBookDetailsFrontContainerElement method", function() {
         })
 
         it("return a HTMLDIVElement'", function() {
-            const element = Books.createBookDetailsFrontContainerElement(elementsObj);
+            const element = UI.createBookDetailsFrontContainerElement(elementsObj);
             expect(element instanceof HTMLDivElement).toBe(true);
         })
         
         it("return an element that has class 'book_details_front'", function() {
-            const element = Books.createBookDetailsFrontContainerElement(elementsObj);
+            const element = UI.createBookDetailsFrontContainerElement(elementsObj);
             expect(element.classList.contains('book_details_front')).toBe(true);
         })
 
         it("return an element that has zero child elements", function() {
-            const element = Books.createBookDetailsFrontContainerElement(elementsObj);
+            const element = UI.createBookDetailsFrontContainerElement(elementsObj);
             expect(element.children.length).toBe(0);
         })
     })
@@ -976,17 +684,17 @@ describe("createBookDetailsFrontContainerElement method", function() {
         })
 
         it("return a HTMLDIVElement'", function() {
-            const element = Books.createBookDetailsFrontContainerElement(elementsObj);
+            const element = UI.createBookDetailsFrontContainerElement(elementsObj);
             expect(element instanceof HTMLDivElement).toBe(true);
         })
         
         it("return an element that has class 'book_details_front'", function() {
-            const element = Books.createBookDetailsFrontContainerElement(elementsObj);
+            const element = UI.createBookDetailsFrontContainerElement(elementsObj);
             expect(element.classList.contains('book_details_front')).toBe(true);
         })
 
         it("return an element that has one child element", function() {
-            const element = Books.createBookDetailsFrontContainerElement(elementsObj);
+            const element = UI.createBookDetailsFrontContainerElement(elementsObj);
             expect(element.children.length).toBe(1);
         })
     })
@@ -1001,17 +709,17 @@ describe("createBookDetailsFrontContainerElement method", function() {
         })
 
         it("return a HTMLDIVElement'", function() {
-            const element = Books.createBookDetailsFrontContainerElement(elementsObj);
+            const element = UI.createBookDetailsFrontContainerElement(elementsObj);
             expect(element instanceof HTMLDivElement).toBe(true);
         })
         
         it("return an element that has class 'book_details_front'", function() {
-            const element = Books.createBookDetailsFrontContainerElement(elementsObj);
+            const element = UI.createBookDetailsFrontContainerElement(elementsObj);
             expect(element.classList.contains('book_details_front')).toBe(true);
         })
 
         it("return an element that has one child element", function() {
-            const element = Books.createBookDetailsFrontContainerElement(elementsObj);
+            const element = UI.createBookDetailsFrontContainerElement(elementsObj);
             expect(element.children.length).toBe(1);
         })
     })
@@ -1026,17 +734,17 @@ describe("createBookDetailsFrontContainerElement method", function() {
         })
 
         it("return a HTMLDIVElement'", function() {
-            const element = Books.createBookDetailsFrontContainerElement(elementsObj);
+            const element = UI.createBookDetailsFrontContainerElement(elementsObj);
             expect(element instanceof HTMLDivElement).toBe(true);
         })
         
         it("return an element that has class 'book_details_front'", function() {
-            const element = Books.createBookDetailsFrontContainerElement(elementsObj);
+            const element = UI.createBookDetailsFrontContainerElement(elementsObj);
             expect(element.classList.contains('book_details_front')).toBe(true);
         })
 
         it("return an element that has one child element", function() {
-            const element = Books.createBookDetailsFrontContainerElement(elementsObj);
+            const element = UI.createBookDetailsFrontContainerElement(elementsObj);
             expect(element.children.length).toBe(1);
         })
     })
@@ -1053,17 +761,17 @@ describe("createBookDetailsFrontContainerElement method", function() {
         })
 
         it("return a HTMLDIVElement'", function() {
-            const element = Books.createBookDetailsFrontContainerElement(elementsObj);
+            const element = UI.createBookDetailsFrontContainerElement(elementsObj);
             expect(element instanceof HTMLDivElement).toBe(true);
         })
         
         it("return an element that has class 'book_details_front'", function() {
-            const element = Books.createBookDetailsFrontContainerElement(elementsObj);
+            const element = UI.createBookDetailsFrontContainerElement(elementsObj);
             expect(element.classList.contains('book_details_front')).toBe(true);
         })
 
         it("return an element that has three child elements", function() {
-            const element = Books.createBookDetailsFrontContainerElement(elementsObj);
+            const element = UI.createBookDetailsFrontContainerElement(elementsObj);
             expect(element.children.length).toBe(3);
         })
     })
@@ -1074,7 +782,7 @@ describe("createBookDetailsBackContainerElement method", function() {
     describe("not given anything", function() {
 
         it("return a undefined'", function() {
-            const element = Books.createBookDetailsBackContainerElement();
+            const element = UI.createBookDetailsBackContainerElement();
             expect(element === undefined).toBe(true);
         })
 
@@ -1091,17 +799,17 @@ describe("createBookDetailsBackContainerElement method", function() {
         })
 
         it("return a HTMLDIVElement'", function() {
-            const element = Books.createBookDetailsBackContainerElement(elementsObj);
+            const element = UI.createBookDetailsBackContainerElement(elementsObj);
             expect(element instanceof HTMLDivElement).toBe(true);
         })
         
         it("return an element that has class 'book_details_back'", function() {
-            const element = Books.createBookDetailsBackContainerElement(elementsObj);
+            const element = UI.createBookDetailsBackContainerElement(elementsObj);
             expect(element.classList.contains('book_details_back')).toBe(true);
         })
 
         it("return an element that has zero child elements", function() {
-            const element = Books.createBookDetailsBackContainerElement(elementsObj);
+            const element = UI.createBookDetailsBackContainerElement(elementsObj);
             expect(element.children.length).toBe(0);
         })
     })
@@ -1117,22 +825,22 @@ describe("createBookDetailsBackContainerElement method", function() {
         })
 
         it("return a HTMLDIVElement'", function() {
-            const element = Books.createBookDetailsBackContainerElement(elementsObj);
+            const element = UI.createBookDetailsBackContainerElement(elementsObj);
             expect(element instanceof HTMLDivElement).toBe(true);
         })
         
         it("return an element that has class 'book_details_back'", function() {
-            const element = Books.createBookDetailsBackContainerElement(elementsObj);
+            const element = UI.createBookDetailsBackContainerElement(elementsObj);
             expect(element.classList.contains('book_details_back')).toBe(true);
         })
 
         it("return an element that has one child element", function() {
-            const element = Books.createBookDetailsBackContainerElement(elementsObj);
+            const element = UI.createBookDetailsBackContainerElement(elementsObj);
             expect(element.children.length).toBe(1);
         })
 
         it("return an element with one child element that has class 'book_details_back_description'", function() {
-            const element = Books.createBookDetailsBackContainerElement(elementsObj);
+            const element = UI.createBookDetailsBackContainerElement(elementsObj);
             expect(element.children[0].classList.contains('book_details_back_description')).toBe(true);
         })
     })
@@ -1147,17 +855,17 @@ describe("createBookDetailsBackContainerElement method", function() {
         })
 
         it("return a HTMLDIVElement'", function() {
-            const element = Books.createBookDetailsBackContainerElement(elementsObj);
+            const element = UI.createBookDetailsBackContainerElement(elementsObj);
             expect(element instanceof HTMLDivElement).toBe(true);
         })
         
         it("return an element that has class 'book_details_back'", function() {
-            const element = Books.createBookDetailsBackContainerElement(elementsObj);
+            const element = UI.createBookDetailsBackContainerElement(elementsObj);
             expect(element.classList.contains('book_details_back')).toBe(true);
         })
 
         it("return an element that has one child element", function() {
-            const element = Books.createBookDetailsBackContainerElement(elementsObj);
+            const element = UI.createBookDetailsBackContainerElement(elementsObj);
             expect(element.children.length).toBe(1);
         })
     })
@@ -1173,23 +881,56 @@ describe("createBookDetailsBackContainerElement method", function() {
         })
 
         it("return a HTMLDIVElement'", function() {
-            const element = Books.createBookDetailsBackContainerElement(elementsObj);
+            const element = UI.createBookDetailsBackContainerElement(elementsObj);
             expect(element instanceof HTMLDivElement).toBe(true);
         })
         
         it("return an element that has class 'book_details_back'", function() {
-            const element = Books.createBookDetailsBackContainerElement(elementsObj);
+            const element = UI.createBookDetailsBackContainerElement(elementsObj);
             expect(element.classList.contains('book_details_back')).toBe(true);
         })
 
         it("return an element that has two child element", function() {
-            const element = Books.createBookDetailsBackContainerElement(elementsObj);
+            const element = UI.createBookDetailsBackContainerElement(elementsObj);
             expect(element.children.length).toBe(2);
         })
 
         it("return an element with one child element that has class 'book_details_back_description'", function() {
-            const element = Books.createBookDetailsBackContainerElement(elementsObj);
+            const element = UI.createBookDetailsBackContainerElement(elementsObj);
             expect(element.children[0].classList.contains('book_details_back_description')).toBe(true);
+        })
+    })
+})
+
+describe("expandSearchForm method", function() {
+    let footerElement,
+    searchToggleElement;
+
+    beforeEach(function() {
+        footerElement = document.createElement('footer');
+        searchToggleElement = document.createElement('button');
+        UI.collapseSearchForm(footerElement, searchToggleElement);
+    })
+
+    describe("given a HTMLELEMENT for the footerElement parameter and for the searchToggleElement parameter", function() {
+        it("with class 'footer--collapsed', remove footer--collapsed class to footerElement", function() {
+            UI.expandSearchForm(footerElement, searchToggleElement);
+            expect(footerElement.classList.contains('footer--collapsed')).toBe(false);
+        })
+
+        it("set dataset.collapsed attribute to false", function() {
+            UI.expandSearchForm(footerElement, searchToggleElement);
+            expect(searchToggleElement.dataset.collapsed).toBe("false");
+        })
+    
+        it("remove search_toggle--collapsed class to searchToggleElement", function() {
+            UI.expandSearchForm(footerElement, searchToggleElement);
+            expect(searchToggleElement.classList.contains('search_toggle--collapsed')).toBe(false);
+        })
+    
+        it("set innerText of searchToggleElement to 'Collapse Search'", function() {
+            UI.expandSearchForm(footerElement, searchToggleElement);
+            expect(searchToggleElement.innerText).toBe('Collapse Search');
         })
     })
 })
@@ -1207,80 +948,23 @@ describe("collapseSearchForm method", function () {
 
     describe("given a HTMLELEMENT for the footerElement parameter and for the searchToggleElement parameter", function () {
         it("add footer--collapsed class to footerElement", function () {
-            Books.collapseSearchForm(footerElement, searchToggleElement);
+            UI.collapseSearchForm(footerElement, searchToggleElement);
             expect(footerElement.classList.contains('footer--collapsed')).toBe(true);
         })
 
         it("add search_toggle--collapsed class to searchToggleElement", function () {
-            Books.collapseSearchForm(footerElement, searchToggleElement);
+            UI.collapseSearchForm(footerElement, searchToggleElement);
             expect(searchToggleElement.classList.contains('search_toggle--collapsed')).toBe(true);
         })
 
         it("set dataset.collapsed attribute to true on searchToggleElement", function () {
-            Books.collapseSearchForm(footerElement, searchToggleElement);
+            UI.collapseSearchForm(footerElement, searchToggleElement);
             expect(searchToggleElement.dataset.collapsed).toBe("true");
         })
 
         it("set innerText of searchToggleElement to 'Expand Search'", function () {
-            Books.collapseSearchForm(footerElement, searchToggleElement);
+            UI.collapseSearchForm(footerElement, searchToggleElement);
             expect(searchToggleElement.innerText).toBe('Expand Search');
-        })
-    })
-})
-
-describe("expandSearchForm method", function() {
-    let footerElement,
-    searchToggleElement;
-
-    beforeEach(function() {
-        footerElement = document.createElement('footer');
-        searchToggleElement = document.createElement('button');
-        Books.collapseSearchForm(footerElement, searchToggleElement);
-    })
-
-    describe("given a HTMLELEMENT for the footerElement parameter and for the searchToggleElement parameter", function() {
-        it("with class 'footer--collapsed', remove footer--collapsed class to footerElement", function() {
-            Books.expandSearchForm(footerElement, searchToggleElement);
-            expect(footerElement.classList.contains('footer--collapsed')).toBe(false);
-        })
-
-        it("set dataset.collapsed attribute to false", function() {
-            Books.expandSearchForm(footerElement, searchToggleElement);
-            expect(searchToggleElement.dataset.collapsed).toBe("false");
-        })
-    
-        it("remove search_toggle--collapsed class to searchToggleElement", function() {
-            Books.expandSearchForm(footerElement, searchToggleElement);
-            expect(searchToggleElement.classList.contains('search_toggle--collapsed')).toBe(false);
-        })
-    
-        it("set innerText of searchToggleElement to 'Collapse Search'", function() {
-            Books.expandSearchForm(footerElement, searchToggleElement);
-            expect(searchToggleElement.innerText).toBe('Collapse Search');
-        })
-    })
-})
-
-describe('showExpandStateForSearchToggleElement method', function() {
-    describe('given a HTMLElement', function() {
-        beforeEach(function() {
-            searchToggleElement = document.createElement('button');
-            Books.showCollapseStateForSearchToggleElement(searchToggleElement);
-        })
-
-        it("set dataset.collapsed attribute to false", function() {
-            Books.showExpandStateForSearchToggleElement(searchToggleElement);
-            expect(searchToggleElement.dataset.collapsed).toBe('false');
-        })
-    
-        it("remove search_toggle--collapsed class to searchToggleElement", function() {
-            Books.showExpandStateForSearchToggleElement(searchToggleElement);
-            expect(searchToggleElement.classList.contains('search_toggle--collapsed')).toBe(false);
-        })
-    
-        it("set innerText of searchToggleElement to 'Collapse Search'", function() {
-            Books.showExpandStateForSearchToggleElement(searchToggleElement);
-            expect(searchToggleElement.innerText).toBe('Collapse Search');
         })
     })
 })
@@ -1289,36 +973,36 @@ describe('showExpandStateForFooterElement method', function() {
     describe('given a HTMLElement', function() {
         beforeEach(function() {
             footerToggleElement = document.createElement('button');
-            Books.showCollapseStateForFooterElement(footerToggleElement);
+            UI.showCollapseStateForFooterElement(footerToggleElement);
         })
     
         it("remove footer--collapsed class to footerToggleElement", function() {
-            Books.showExpandStateForFooterElement(footerToggleElement);
+            UI.showExpandStateForFooterElement(footerToggleElement);
             expect(footerToggleElement.classList.contains('footer--collapsed')).toBe(false);
         })
     })
 })
 
-describe('showCollapseStateForSearchToggleElement method', function() {
+describe('showExpandStateForSearchToggleElement method', function() {
     describe('given a HTMLElement', function() {
         beforeEach(function() {
             searchToggleElement = document.createElement('button');
-            Books.showExpandStateForSearchToggleElement(searchToggleElement);
+            UI.showCollapseStateForSearchToggleElement(searchToggleElement);
         })
 
-        it("set dataset.collapsed attribute to true", function() {
-            Books.showCollapseStateForSearchToggleElement(searchToggleElement);
-            expect(searchToggleElement.dataset.collapsed).toBe('true');
+        it("set dataset.collapsed attribute to false", function() {
+            UI.showExpandStateForSearchToggleElement(searchToggleElement);
+            expect(searchToggleElement.dataset.collapsed).toBe('false');
         })
     
-        it("add search_toggle--collapsed class to searchToggleElement", function() {
-            Books.showCollapseStateForSearchToggleElement(searchToggleElement);
-            expect(searchToggleElement.classList.contains('search_toggle--collapsed')).toBe(true);
+        it("remove search_toggle--collapsed class to searchToggleElement", function() {
+            UI.showExpandStateForSearchToggleElement(searchToggleElement);
+            expect(searchToggleElement.classList.contains('search_toggle--collapsed')).toBe(false);
         })
     
-        it("set innerText of searchToggleElement to 'Expand Search'", function() {
-            Books.showCollapseStateForSearchToggleElement(searchToggleElement);
-            expect(searchToggleElement.innerText).toBe('Expand Search');
+        it("set innerText of searchToggleElement to 'Collapse Search'", function() {
+            UI.showExpandStateForSearchToggleElement(searchToggleElement);
+            expect(searchToggleElement.innerText).toBe('Collapse Search');
         })
     })
 })
@@ -1327,23 +1011,36 @@ describe('showCollapseStateForFooterElement method', function() {
     describe('given a HTMLElement', function() {
         beforeEach(function() {
             footerToggleElement = document.createElement('button');
-            Books.showExpandStateForFooterElement(footerToggleElement);
+            UI.showExpandStateForFooterElement(footerToggleElement);
         })
     
         it("add footer--collapsed class to footerToggleElement", function() {
-            Books.showCollapseStateForFooterElement(footerToggleElement);
+            UI.showCollapseStateForFooterElement(footerToggleElement);
             expect(footerToggleElement.classList.contains('footer--collapsed')).toBe(true);
         })
     })
 })
 
-describe('Object is empty method', function() {
-    it('given empty object, return true', function() {
-        const obj = {};
-        expect(obj.isEmpty()).toBe(true);
-    })
-    it('given non-empty object, return true', function() {
-        const obj = {a: 1};
-        expect(obj.isEmpty()).toBe(false);
+describe('showCollapseStateForSearchToggleElement method', function() {
+    describe('given a HTMLElement', function() {
+        beforeEach(function() {
+            searchToggleElement = document.createElement('button');
+            UI.showExpandStateForSearchToggleElement(searchToggleElement);
+        })
+
+        it("set dataset.collapsed attribute to true", function() {
+            UI.showCollapseStateForSearchToggleElement(searchToggleElement);
+            expect(searchToggleElement.dataset.collapsed).toBe('true');
+        })
+    
+        it("add search_toggle--collapsed class to searchToggleElement", function() {
+            UI.showCollapseStateForSearchToggleElement(searchToggleElement);
+            expect(searchToggleElement.classList.contains('search_toggle--collapsed')).toBe(true);
+        })
+    
+        it("set innerText of searchToggleElement to 'Expand Search'", function() {
+            UI.showCollapseStateForSearchToggleElement(searchToggleElement);
+            expect(searchToggleElement.innerText).toBe('Expand Search');
+        })
     })
 })
