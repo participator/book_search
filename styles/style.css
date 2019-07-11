@@ -199,7 +199,7 @@ footer {
     margin: 0;
 }
 .search_form_invalidMessage {
-    color: red;
+    color: #A41308;
     text-align: center;
 }
 .search_form_inputs {

@@ -43,7 +43,7 @@
 
         const searchToggleElement = document.querySelector('.search_toggle');
         const footerElement = document.querySelector('footer');
-        searchToggleElement.addEventListener('click', event => {
+        searchToggleElement.addEventListener('click', () => {
             Books.changeSearchFormState(footerElement, searchToggleElement);
         });
     }
