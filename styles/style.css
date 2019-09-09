@@ -22,8 +22,8 @@ header {
 .logo {
     display: flex;
     font-size: 4em;
-    left: calc(75vw/2);
-    top: calc(75vh/2);
+    left: calc(60vw/2);
+    top: calc(60vh/2);
     position: fixed;
 }
 .logoMove {
