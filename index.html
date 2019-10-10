@@ -1,35 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="scripts/books.js" type="application/javascript"></script>
-    <script src="scripts/books.common.js" type="application/javascript"></script>
-    <script src="scripts/books.api.js" type="application/javascript"></script>
-    <script src="scripts/books.ui.js" type="application/javascript"></script>
-    <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
-    <link href="images/favicon.png" rel="shortcut icon" type="image/png">
-    <link href="styles/style.css" type="text/css" rel="stylesheet">
-    <link href="styles/style_responsive.css" type="text/css" rel="stylesheet">
-    <title>Book Search</title>
-  </head>
-  <body>
-    <header>
-      <div class="logo"><img class="logo_icon" src="images/Logo.svg" alt="Book Search Logo">Book Search</div>
-    </header>
-    <main class="content">
-    </main>
-    <footer>
-      <div class="search">
-        <button type="button" class="search_toggle" data-collapsed="false">Collapse Search</button>
-        <form class="search_form" name="bookSearch">
-          <div class="search_form_invalidMessage hideVisibility">Invalid User Input</div>
-          <div class="search_form_inputs">
-            <label class="visuallyhidden" for="searchInput">Enter terms to search</label>
-            <input id="searchInput" class="search_form_input" type="text" name="query" placeholder="Enter search...">
-            <button class="search_form_submitButton" name="submit" type="submit">Search</button>
-          </div>
-        </form>
-      </div>
-    </footer>
-  </body>
+<head>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-149784438-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'UA-149784438-1');
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="scripts/books.js" type="application/javascript"></script>
+  <script src="scripts/books.common.js" type="application/javascript"></script>
+  <script src="scripts/books.api.js" type="application/javascript"></script>
+  <script src="scripts/books.ui.js" type="application/javascript"></script>
+  <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+  <link href="images/favicon.png" rel="shortcut icon" type="image/png">
+  <link href="styles/style.css" type="text/css" rel="stylesheet">
+  <link href="styles/style_responsive.css" type="text/css" rel="stylesheet">
+  <title>Book Search</title>
+</head>
+<body>
+  <header>
+    <div class="logo"><img class="logo_icon" src="images/Logo.svg" alt="Book Search Logo">Book Search</div>
+  </header>
+  <main class="content">
+  </main>
+  <footer>
+    <div class="search">
+      <button type="button" class="search_toggle" data-collapsed="false">Collapse Search</button>
+      <form class="search_form" name="bookSearch">
+        <div class="search_form_invalidMessage hideVisibility">Invalid User Input</div>
+        <div class="search_form_inputs">
+          <label class="visuallyhidden" for="searchInput">Enter terms to search</label>
+          <input id="searchInput" class="search_form_input" type="text" name="query" placeholder="Enter search...">
+          <button class="search_form_submitButton" name="submit" type="submit">Search</button>
+        </div>
+      </form>
+    </div>
+  </footer>
+</body>
 </html>
