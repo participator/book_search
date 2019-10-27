@@ -1,4 +1,4 @@
-Use [Book Search](https://participator.github.io/book_search/index.html)
+Use [Book Search](https://participator.github.io/book_search)
 
 ## Features
 - User can type in a query and display a list of books matching that query.
