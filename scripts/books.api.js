@@ -12,7 +12,7 @@
     Books.API = API;
 
     API.getAPIKey = () => {
-        return 'AIzaSyC8YoC2vugrIsUpfieEtNGwdhUDHR8WKQ0';
+        return 'AIzaSyDcyJKDM99zfzRxsvr4kk9o8hIkQtKeNho';
     }
 
     API.getBooksAPIJsonData = (API_KEY, userQuery, currentPageNumber) => {
