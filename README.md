@@ -1,4 +1,4 @@
-Use [Book Search](https://participator.github.io/book_search)
+Use [Book Search](https://booksearch.varell.me)
 
 ## Features
 - User can type in a query and display a list of books matching that query.
